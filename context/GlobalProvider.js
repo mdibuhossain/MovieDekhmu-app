@@ -10,13 +10,14 @@ const GlobalProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const checkUser = async () => {
     try {
+      setIsLoggedIn(true);
       getCurrentUser()
         .then((user) => {
           if (user) {
             setUser(user);
-            setIsLoggedIn(true);
+            setIsLoggedIn(false);
           }
         })
         .catch((error) => {
@@ -30,10 +31,16 @@ const GlobalProvider = ({ children }) => {
       setError(error.message);
       setIsLoading(false);
     }
+  };
+
+  useEffect(() => {
+    checkUser();
   }, []);
 
   return (
-    <GlobalContext.Provider value={{ isLoading, user, isLoggedIn, error }}>
+    <GlobalContext.Provider
+      value={{ isLoading, user, isLoggedIn, error, checkUser }}
+    >
       {children}
     </GlobalContext.Provider>
   );

@@ -1,16 +1,28 @@
 import { Image, Text, View } from "react-native";
 import React from "react";
 import CustomButton from "../../components/CustomButton";
-import { logOut, verifyEmail } from "../../lib/firebaseService";
+import { logOut, updateUserData, verifyEmail } from "../../lib/firebaseService";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import ScreenLayout from "../../components/ScreenLayout";
 import { images } from "../../constants";
 import CustomInpurField from "../../components/CustomInpurField";
 
 const Profile = () => {
-  const { user } = useGlobalContext();
+  const { user, checkUser, isLoggedIn } = useGlobalContext();
+  const [newName, setNewName] = React.useState("");
 
-  console.log("User: ", user);
+  const handleUpdateFullName = async () => {
+    try {
+      if (newName === "") return alert("Name cannot be empty");
+      const result = await updateUserData({ displayName: newName });
+      if (result) {
+        await checkUser();
+        setNewName("");
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   const handleVerifyEmail = async () => {
     try {
@@ -30,11 +42,12 @@ const Profile = () => {
             source={images.profile}
           />
           <Text className="text-white text-base font-mPbold mt-2">
-            {user?.displayName || "No name found"}
+            {isLoggedIn ? "Loading..." : user?.displayName || "No name found"}
           </Text>
           <Text className="text-white text-xs font-mPregular">
-            {user?.email}
-            {user?.emailVerified ? " ✅" : " ❌"}
+            {isLoggedIn
+              ? "Loading..."
+              : `${user?.email}${user?.emailVerified ? " ✅" : " ❌"}`}
           </Text>
           {!user?.emailVerified && (
             <CustomButton
@@ -47,14 +60,17 @@ const Profile = () => {
         </View>
         <View className="w-full">
           <CustomInpurField
+            value={newName}
             label="Full Name"
             containerStyle="mt-5"
-            inputFieldContainerStyle="flex-1"
+            inputFieldContainerStyle="flex-1 focus:!border-secondary"
+            handleChangeText={setNewName}
             GroupedButton={
               <CustomButton
                 title="Update"
                 containerStyle="justify-center items-center px-2 rounded-none active:bg-red-600"
                 textStyle="text-white text-xs uppercase"
+                handlePress={handleUpdateFullName}
               />
             }
           />
