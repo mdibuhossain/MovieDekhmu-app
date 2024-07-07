@@ -8,13 +8,13 @@ import { images } from "../../constants";
 import CustomInpurField from "../../components/CustomInpurField";
 
 const Profile = () => {
-  const { user, checkUser, isLoggedIn } = useGlobalContext();
+  const { user, checkUser, isLoading } = useGlobalContext();
   const [newName, setNewName] = React.useState("");
 
   const handleUpdateFullName = async () => {
     try {
-      if (newName === "") return alert("Name cannot be empty");
-      const result = await updateUserData({ displayName: newName });
+      if (newName.trim() === "") return alert("Name cannot be empty");
+      const result = await updateUserData({ displayName: newName.trim() });
       if (result) {
         await checkUser();
         setNewName("");
@@ -44,10 +44,10 @@ const Profile = () => {
             />
           </View>
           <Text className="text-white text-base font-mPbold mt-2">
-            {isLoggedIn ? "Loading..." : user?.displayName || "No name found"}
+            {isLoading ? "Loading..." : user?.displayName || "No name found"}
           </Text>
           <Text className="text-white text-xs font-mPregular">
-            {isLoggedIn
+            {isLoading
               ? "Loading..."
               : `${user?.email}${user?.emailVerified ? " ✅" : " ❌"}`}
           </Text>

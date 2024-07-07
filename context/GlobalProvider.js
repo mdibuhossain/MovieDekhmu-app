@@ -12,19 +12,17 @@ const GlobalProvider = ({ children }) => {
 
   const checkUser = async () => {
     try {
-      setIsLoggedIn(true);
+      setIsLoading(true);
       getCurrentUser()
         .then((user) => {
           if (user) {
             setUser(user);
-            setIsLoggedIn(false);
+            setIsLoggedIn(true);
           }
+          setIsLoading(false);
         })
         .catch((error) => {
           setError(error.message);
-          setIsLoading(false);
-        })
-        .finally(() => {
           setIsLoading(false);
         });
     } catch (error) {
