@@ -36,11 +36,13 @@ const Profile = () => {
     <ScreenLayout>
       <View className="flex-1 items-center">
         <View className="w-full items-center">
-          <Image
-            className="w-20 h-20 rounded-full"
-            resizeMode="contain"
-            source={images.profile}
-          />
+          <View className="p-1 justify-center items-center rounded-full bg-gray-700">
+            <Image
+              className="w-20 h-20 rounded-full"
+              resizeMode="contain"
+              source={images.profile}
+            />
+          </View>
           <Text className="text-white text-base font-mPbold mt-2">
             {isLoggedIn ? "Loading..." : user?.displayName || "No name found"}
           </Text>
