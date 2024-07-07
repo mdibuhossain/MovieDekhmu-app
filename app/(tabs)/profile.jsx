@@ -46,7 +46,18 @@ const Profile = () => {
           )}
         </View>
         <View className="w-full">
-          <CustomInpurField label="Full Name" containerStyle="mt-5" />
+          <CustomInpurField
+            label="Full Name"
+            containerStyle="mt-5"
+            inputFieldContainerStyle="flex-1"
+            GroupedButton={
+              <CustomButton
+                title="Update"
+                containerStyle="justify-center items-center px-2 rounded-none active:bg-red-600"
+                textStyle="text-white text-xs uppercase"
+              />
+            }
+          />
         </View>
         <View className="flex-1 justify-end">
           <CustomButton
