@@ -12,8 +12,6 @@ const Profile = () => {
   const { user, checkUser, isLoading } = useGlobalContext();
   const [newName, setNewName] = React.useState("");
 
-  console.log(user);
-
   const handleUpdateFullName = async () => {
     try {
       if (newName.trim() === "") return alert("Name cannot be empty");

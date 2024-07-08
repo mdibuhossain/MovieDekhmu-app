@@ -29,7 +29,6 @@ const TabIcon = ({ icon, color, name, focused }) => {
 const TabsLayout = () => {
   return (
     <>
-      {/* <GlobalProvider> */}
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
@@ -104,7 +103,6 @@ const TabsLayout = () => {
           }}
         />
       </Tabs>
-      {/* </GlobalProvider> */}
     </>
   );
 };
