@@ -3,6 +3,7 @@ import React from "react";
 import { Tabs } from "expo-router";
 
 import { icons } from "../../constants";
+import GlobalProvider from "../../context/GlobalProvider";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
@@ -28,6 +29,7 @@ const TabIcon = ({ icon, color, name, focused }) => {
 const TabsLayout = () => {
   return (
     <>
+      {/* <GlobalProvider> */}
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
@@ -102,6 +104,7 @@ const TabsLayout = () => {
           }}
         />
       </Tabs>
+      {/* </GlobalProvider> */}
     </>
   );
 };

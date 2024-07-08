@@ -8,11 +8,17 @@ import ScreenLayout from "../components/ScreenLayout";
 import { useGlobalContext } from "../context/GlobalProvider";
 
 const index = () => {
-  const { isLoggedIn, isLoading } = useGlobalContext();
+  const { isLoggedIn, isLoading, user } = useGlobalContext();
 
-  if (isLoggedIn && !isLoading) {
-    return <Redirect href="/home" />;
+  if (isLoading) {
+    return (
+      <>
+        <Text>Loading...</Text>
+      </>
+    );
   }
+
+  if (isLoggedIn && user?.email) return <Redirect href="/home" />;
 
   return (
     <>

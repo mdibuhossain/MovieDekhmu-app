@@ -1,4 +1,4 @@
-import { Image, Text, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import CustomButton from "../../components/CustomButton";
 import { logOut, updateUserData, verifyEmail } from "../../lib/firebaseService";
@@ -6,17 +6,20 @@ import { useGlobalContext } from "../../context/GlobalProvider";
 import ScreenLayout from "../../components/ScreenLayout";
 import { images } from "../../constants";
 import CustomInpurField from "../../components/CustomInpurField";
+import FeatherIcons from "@expo/vector-icons/Feather";
 
 const Profile = () => {
   const { user, checkUser, isLoading } = useGlobalContext();
   const [newName, setNewName] = React.useState("");
+
+  console.log(user);
 
   const handleUpdateFullName = async () => {
     try {
       if (newName.trim() === "") return alert("Name cannot be empty");
       const result = await updateUserData({ displayName: newName.trim() });
       if (result) {
-        await checkUser();
+        checkUser();
         setNewName("");
       }
     } catch (error) {
@@ -35,6 +38,11 @@ const Profile = () => {
   return (
     <ScreenLayout>
       <View className="flex-1 items-center">
+        <View className="absolute top-0 right-0">
+          <TouchableOpacity onPress={logOut}>
+            <FeatherIcons name="log-out" size={25} color="#FF9C01" />
+          </TouchableOpacity>
+        </View>
         <View className="w-full items-center">
           <View className="p-1 justify-center items-center rounded-full bg-gray-700">
             <Image
