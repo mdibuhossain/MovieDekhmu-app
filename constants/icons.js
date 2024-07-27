@@ -11,19 +11,21 @@ import profile from "../assets/icons/profile.png";
 import rightArrow from "../assets/icons/right-arrow.png";
 import search from "../assets/icons/search.png";
 import upload from "../assets/icons/upload.png";
+import compass from "../assets/icons/compass.png";
 
 export default {
-  bookmark,
-  eyeHide,
   eye,
-  home,
-  leftArrow,
-  logout,
-  menu,
   play,
+  menu,
   plus,
-  profile,
-  rightArrow,
+  home,
+  logout,
   search,
   upload,
+  eyeHide,
+  compass,
+  profile,
+  bookmark,
+  leftArrow,
+  rightArrow,
 };

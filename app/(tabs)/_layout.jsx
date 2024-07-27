@@ -10,8 +10,8 @@ const TabIcon = ({ icon, color, name, focused }) => {
       <Image
         source={icon}
         resizeMode="contain"
-        tintColor={color}
-        className="w-6 h-6"
+        // tintColor={color}
+        className={`${focused ? "w-8 h-8" : "w-8 h-8"}`}
       />
       <Text
         style={{ color: color }}
@@ -57,14 +57,14 @@ const TabsLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="bookmark"
+          name="explore"
           options={{
-            title: "Bookmark",
+            title: "Explore",
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={icons.bookmark}
-                name="Bookmark"
+                icon={icons.compass}
+                name="Explore"
                 color={color}
                 focused={focused}
               />
@@ -80,6 +80,21 @@ const TabsLayout = () => {
               <TabIcon
                 icon={icons.plus}
                 name="Create"
+                color={color}
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="bookmark"
+          options={{
+            title: "Bookmark",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={icons.bookmark}
+                name="Bookmark"
                 color={color}
                 focused={focused}
               />
