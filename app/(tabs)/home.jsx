@@ -6,13 +6,8 @@ import { AntDesign } from "@expo/vector-icons";
 import {
   Button,
   Card,
-  H1,
-  H2,
   H4,
-  H5,
-  Image,
   Paragraph,
-  ScrollView,
   Separator,
   XStack,
 } from "tamagui";
@@ -129,13 +124,13 @@ const CustomDropdown = () => {
         setIsFocus(false);
       }}
       renderItem={renderItem}
-      // renderLeftIcon={() => (
-      //   <AntDesign
-      //     color={isFocus ? "blue" : "black"}
-      //     name="Review"
-      //     size={20}
-      //   />
-      // )}
+    // renderLeftIcon={() => (
+    //   <AntDesign
+    //     color={isFocus ? "blue" : "black"}
+    //     name="Review"
+    //     size={20}
+    //   />
+    // )}
     />
   );
 };
