@@ -6,6 +6,8 @@ import CustomButton from "../../components/CustomButton";
 import { images } from "../../constants";
 import { Link, router } from "expo-router";
 import { logIn } from "../../lib/firebaseService";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/redux/slices/authSlice";
 
 const initialUserInfo = {
   email: "",
@@ -13,8 +15,9 @@ const initialUserInfo = {
 };
 
 const SignIn = () => {
+  const dispatch = useDispatch();
   const [formPayload, setFormPayload] = React.useState(initialUserInfo);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const { isLoading } = useSelector((state) => state.auth);
 
   const handleSignIn = async () => {
     if (!formPayload.email || !formPayload.password) {
@@ -22,16 +25,16 @@ const SignIn = () => {
       return;
     }
     try {
-      setIsLoading(true);
+      dispatch(setLoading(true));
       const user = await logIn(formPayload.email, formPayload.password);
       if (user?.email) {
         router.replace("/home");
       }
     } catch (error) {
       alert(error.message);
-      setIsLoading(false);
+      dispatch(setLoading(false));
     } finally {
-      setIsLoading(false);
+      dispatch(setLoading(false));
     }
   };
 

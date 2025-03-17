@@ -1,16 +1,15 @@
 import { Image, ScrollView, Text, View } from "react-native";
 import { Redirect, router } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../constants";
 import CustomButton from "../components/CustomButton";
 import { StatusBar } from "expo-status-bar";
 import ScreenLayout from "../components/ScreenLayout";
-import { useGlobalContext } from "../context/GlobalProvider";
+import { useSelector } from "react-redux";
 
 const index = () => {
-  const { isLoggedIn, isLoading, user } = useGlobalContext();
+  const authData = useSelector((state) => state.auth);
 
-  if (isLoading) {
+  if (authData?.isLoading) {
     return (
       <>
         <Text>Loading...</Text>
@@ -18,7 +17,7 @@ const index = () => {
     );
   }
 
-  if (isLoggedIn && user?.email) return <Redirect href="/home" />;
+  if (authData?.user?.email) return <Redirect href="/home" />;
 
   return (
     <>

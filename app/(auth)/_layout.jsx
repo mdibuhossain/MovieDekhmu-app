@@ -1,11 +1,12 @@
 import { Redirect, Stack } from "expo-router";
 import React from "react";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { useSelector } from "react-redux";
 
 const AuthLayout = () => {
-  const { isLoggedIn, user } = useGlobalContext();
+  const authData = useSelector((state) => state.auth);
 
-  if (isLoggedIn && user?.email) return <Redirect href="/home" />;
+  if (authData?.user?.email) return <Redirect href="/home" />;
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

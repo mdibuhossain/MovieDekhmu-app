@@ -24,7 +24,6 @@ const initialUserInfo = {
 const SignUp = () => {
   const [formPayload, setFormPayload] = React.useState(initialUserInfo);
   const [isLoadingLocally, setIsLoadingLocally] = React.useState(false);
-  const { checkUser } = useGlobalContext();
 
   const handleSignUp = async () => {
     if (formPayload.password !== formPayload.passwordConfirmation) {
@@ -40,7 +39,7 @@ const SignUp = () => {
       );
       setIsLoadingLocally(loading);
       if (data) {
-        await checkUser();
+        // await checkUser();
       }
     } catch (error) {
       setIsLoadingLocally(false);
@@ -107,9 +106,9 @@ const SignUp = () => {
               isLoading={isLoadingLocally}
               isDisabled={
                 formPayload.password &&
-                formPayload.email &&
-                formPayload.fullName &&
-                formPayload.passwordConfirmation
+                  formPayload.email &&
+                  formPayload.fullName &&
+                  formPayload.passwordConfirmation
                   ? false
                   : true
               }
