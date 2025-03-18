@@ -103,53 +103,53 @@ const Profile = () => {
   }, [isLoading]);
 
   const items = [
-    {
-      isButton: false,
-      title: "My Orders",
-      icon: svgs.orders,
-      onPress: () => {},
-    },
-    {
-      isButton: false,
-      title: "My Address",
-      icon: svgs.address,
-      onPress: () => {},
-    },
-    {
-      isButton: false,
-      title: "My Payment",
-      icon: svgs.payment,
-      onPress: () => {},
-    },
-    {
-      isButton: false,
-      title: "My Wishlist",
-      icon: svgs.wishlist,
-      onPress: () => {},
-    },
-    {
-      isButton: false,
-      title: "My Reviews",
-      icon: svgs.reviews,
-      onPress: () => {},
-    },
-    {
-      isButton: false,
-      title: "My Coupons",
-      icon: svgs.coupons,
-      onPress: () => {},
-    },
-    {
-      isButton: false,
-      title: "My Notifications",
-      icon: svgs.notifications,
-      onPress: () => {},
-    },
+    // {
+    //   isButton: false,
+    //   title: "My Orders",
+    //   icon: svgs.orders,
+    //   onPress: () => {},
+    // },
+    // {
+    //   isButton: false,
+    //   title: "My Address",
+    //   icon: svgs.address,
+    //   onPress: () => {},
+    // },
+    // {
+    //   isButton: false,
+    //   title: "My Payment",
+    //   icon: svgs.payment,
+    //   onPress: () => {},
+    // },
+    // {
+    //   isButton: false,
+    //   title: "My Wishlist",
+    //   icon: svgs.wishlist,
+    //   onPress: () => {},
+    // },
+    // {
+    //   isButton: false,
+    //   title: "My Reviews",
+    //   icon: svgs.reviews,
+    //   onPress: () => {},
+    // },
+    // {
+    //   isButton: false,
+    //   title: "My Coupons",
+    //   icon: svgs.coupons,
+    //   onPress: () => {},
+    // },
+    // {
+    //   isButton: false,
+    //   title: "My Notifications",
+    //   icon: svgs.notifications,
+    //   onPress: () => {},
+    // },
     {
       isButton: false,
       title: "My Settings",
       icon: svgs.settings,
-      onPress: () => {},
+      onPress: () => { },
     },
     {
       isButton: true,
