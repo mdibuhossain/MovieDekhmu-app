@@ -1,63 +1,86 @@
 import { View } from "react-native";
 import { useState } from "react";
-import { Button, Form, Input, Label, ScrollView, Select, Spinner, XStack, YStack } from "tamagui";
+import {
+  Button,
+  Form,
+  Input,
+  Label,
+  ScrollView,
+  Select,
+  Spinner,
+  XStack,
+  YStack,
+} from "tamagui";
 import CustomInpurField from "../../components/CustomInpurField";
 import { useDispatch } from "react-redux";
+import { Dropdown } from "../../components/Dropdown";
 
 const Create = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  
 
   const submitHandler = () => [
     setIsLoading(true),
     setTimeout(() => {
       setIsLoading(false);
     }, 1000),
-  ]
+  ];
 
   return (
     <View className="bg-primary flex-1 items-center">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Form
-          onSubmit={submitHandler}
-        >
+        <Form onSubmit={submitHandler}>
           {/* <CustomInpurField
             label="Title"
           /> */}
-          <YStack >
+          <YStack>
             <Label htmlFor="title" color="white">
               Movie title
             </Label>
-            <Input id="title" minWidth="100%" backgroundColor="transparent" color="white" />
+            <Input
+              id="title"
+              minWidth="100%"
+              backgroundColor="transparent"
+              color="white"
+            />
           </YStack>
-          <YStack>
-            <Label htmlFor="origin" color="white">
-              Origin
-            </Label>
-            <Input id="origin" minWidth="100%" backgroundColor="transparent" color="white" />
-          </YStack>
-          <YStack>
-            <Label htmlFor="type" color="white">
-              Type
-            </Label>
-            <Input id="type" minWidth="100%" backgroundColor="transparent" color="white" />
-          </YStack>
-          <YStack>
-            <Label htmlFor="year" color="white">
-              Year
-            </Label>
-            <Input id="year" minWidth="100%" backgroundColor="transparent" color="white" />
-          </YStack>
+          <View className="flex-row w-full">
+            <YStack className="flex-1 mr-2">
+              <Label htmlFor="year" color="white">
+                Year
+              </Label>
+              <Dropdown />
+              {/* <Input
+                id="year"
+                className="w-full"
+                color="white"
+                backgroundColor="transparent"
+              /> */}
+            </YStack>
+            <YStack className="flex-1">
+              <Label htmlFor="origin" color="white">
+                Origin
+              </Label>
+              <Dropdown />
+            </YStack>
+          </View>
           <YStack>
             <Label htmlFor="review" color="white">
               Review
             </Label>
-            <Input id="review" minWidth="100%" backgroundColor="transparent" color="white" />
+            <Input
+              id="review"
+              minWidth="100%"
+              backgroundColor="transparent"
+              color="white"
+            />
           </YStack>
-         
+
           <Form.Trigger asChild disabled={isLoading} className="my-5">
-            <Button icon={isLoading ? () => <Spinner /> : null} className="bg-secondary text-white">
+            <Button
+              icon={isLoading ? () => <Spinner /> : null}
+              className="bg-secondary text-white"
+            >
               Submit
             </Button>
           </Form.Trigger>
