@@ -6,12 +6,9 @@ import {
   Input,
   Label,
   ScrollView,
-  Select,
   Spinner,
-  XStack,
   YStack,
 } from "tamagui";
-import CustomInpurField from "../../components/CustomInpurField";
 import { useDispatch } from "react-redux";
 import { Dropdown } from "../../components/Dropdown";
 
@@ -27,7 +24,7 @@ const Create = () => {
   ];
 
   return (
-    <View className="bg-primary flex-1 items-center">
+    <View className="bg-primary flex-1 items-center px-2">
       <ScrollView showsVerticalScrollIndicator={false}>
         <Form onSubmit={submitHandler}>
           {/* <CustomInpurField
@@ -49,19 +46,13 @@ const Create = () => {
               <Label htmlFor="year" color="white">
                 Year
               </Label>
-              <Dropdown />
-              {/* <Input
-                id="year"
-                className="w-full"
-                color="white"
-                backgroundColor="transparent"
-              /> */}
+              <Dropdown color="white" backgroundColor="transparent" />
             </YStack>
             <YStack className="flex-1">
               <Label htmlFor="origin" color="white">
                 Origin
               </Label>
-              <Dropdown />
+              <Dropdown color="white" backgroundColor="transparent" />
             </YStack>
           </View>
           <YStack>

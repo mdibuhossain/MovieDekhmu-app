@@ -13,11 +13,18 @@ export function Dropdown(props) {
       disablePreventBodyScroll
       {...props}
     >
-      <Select.Trigger width="100%" iconAfter={ChevronDown}>
-        <Select.Value placeholder="Something" />
+      <Select.Trigger
+        width="100%"
+        iconAfter={ChevronDown}
+        color={props.color}
+        backgroundColor={props.backgroundColor}
+        focusStyle={{ backgroundColor: "$shadowColor" }}
+        focusVisibleStyle={{ backgroundColor: props.backgroundColor }}
+      >
+        <Select.Value color={props.color} placeholder="Something" />
       </Select.Trigger>
 
-      <Adapt when="sm" platform="touch">
+      <Adapt when="sm" platform="touch" >
         <Sheet
           native={!!props.native}
           modal
