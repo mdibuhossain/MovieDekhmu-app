@@ -2,11 +2,10 @@ import {
   Image,
   RefreshControl,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import { useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import {
   logOut,
@@ -14,22 +13,22 @@ import {
   uploadProfilePicture,
   verifyEmail,
 } from "../../lib/firebaseService";
-import { useGlobalContext } from "../../context/GlobalProvider";
 import { images, svgs } from "../../constants";
 import FeatherIcons from "@expo/vector-icons/Feather";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import * as ImagePicker from "expo-image-picker";
 import { FlashList } from "@shopify/flash-list";
 import CustomInpurField from "../../components/CustomInpurField";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, setLoading, setTrigger } from "@/redux/slices/authSlice";
 
 const Profile = () => {
-  const { user, setIsLoading, isLoading, setTrigger, trigger, setUser } =
-    useGlobalContext();
-  const [isLoadingForPhoto, setIsLoadingForPhoto] = React.useState(false);
-  const [isLoadingForName, setIsLoadingForName] = React.useState(false);
-  const [isLoadingForEmailVerify, setIsLoadingForEmailVerify] =
-    React.useState(false);
-  const [isLoadingLocal, setIsLoadingLocal] = React.useState(false);
+  const dispatch = useDispatch();
+  const { user, isLoading, trigger } = useSelector((state) => state.auth);
+  const [isLoadingForPhoto, setIsLoadingForPhoto] = useState(false);
+  const [isLoadingForName, setIsLoadingForName] = useState(false);
+  const [isLoadingForEmailVerify, setIsLoadingForEmailVerify] = useState(false);
+  const [isLoadingLocal, setIsLoadingLocal] = useState(false);
 
   const handleUpdateFullName = async (newName) => {
     setIsLoadingForName(true);
@@ -37,7 +36,7 @@ const Profile = () => {
       if (newName.trim() === "") return alert("Name cannot be empty");
       const result = await updateUserData({ displayName: newName.trim() });
       if (result?.displayName) {
-        setUser({ ...user, displayName: result.displayName });
+        dispatch(setUser({ ...user, displayName: result.displayName }));
         setIsLoadingForName(false);
       }
     } catch (error) {
@@ -77,7 +76,7 @@ const Profile = () => {
             photoURL: url,
           });
           if (response) {
-            setUser({ ...user, photoURL: url });
+            dispatch(setUser({ ...user, photoURL: url }));
           }
         })
         .catch((error) => {
@@ -89,16 +88,16 @@ const Profile = () => {
 
   const signOut = async () => {
     await logOut();
-    setUser(null);
+    dispatch(setUser(null));
   };
 
   const onRefresh = () => {
-    setIsLoading(true);
+    dispatch(setLoading(true));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isLoading) {
-      setTrigger(!trigger);
+      dispatch(setTrigger(!trigger));
     }
   }, [isLoading]);
 
@@ -149,7 +148,7 @@ const Profile = () => {
       isButton: false,
       title: "My Settings",
       icon: svgs.settings,
-      onPress: () => { },
+      onPress: () => {},
     },
     {
       isButton: true,

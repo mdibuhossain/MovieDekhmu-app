@@ -1,7 +1,6 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
-
 import { icons } from "../../constants";
 
 const TabIcon = ({ icon, color, name, focused }) => {
@@ -26,6 +25,14 @@ const TabIcon = ({ icon, color, name, focused }) => {
 };
 
 const TabsLayout = () => {
+  const TabsData = [
+    { name: "home", title: "Home", header: false, icon: icons.home },
+    { name: "explore", title: "Explore", header: false, icon: icons.compass },
+    { name: "create", title: "Create", header: false, icon: icons.plus },
+    { name: "bookmark", title: "Bookmark", header: false, icon: icons.bookmark },
+    { name: "profile", title: "Profile", header: false, icon: icons.profile },
+  ];
+
   return (
     <>
       <Tabs
@@ -46,81 +53,24 @@ const TabsLayout = () => {
           },
         }}
       >
-        <Tabs.Screen
-          name="home"
-          options={{
-            title: "Home",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                icon={icons.home}
-                name="Home"
-                color={color}
-                focused={focused}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="explore"
-          options={{
-            title: "Explore",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                icon={icons.compass}
-                name="Explore"
-                color={color}
-                focused={focused}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="create"
-          options={{
-            title: "Create",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                icon={icons.plus}
-                name="Create"
-                color={color}
-                focused={focused}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="bookmark"
-          options={{
-            title: "Bookmark",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                icon={icons.bookmark}
-                name="Bookmark"
-                color={color}
-                focused={focused}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="profile"
-          options={{
-            title: "Profile",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                icon={icons.profile}
-                name="Profile"
-                color={color}
-                focused={focused}
-              />
-            ),
-          }}
-        />
+        {TabsData?.map((tabItem, index) => (
+          <Tabs.Screen
+            key={index}
+            name={tabItem.name}
+            options={{
+              title: tabItem.title,
+              headerShown: tabItem.header,
+              tabBarIcon: ({ color, focused }) => (
+                <TabIcon
+                  icon={tabItem.icon}
+                  name={tabItem.title}
+                  color={color}
+                  focused={focused}
+                />
+              ),
+            }}
+          />
+        ))}
       </Tabs>
     </>
   );

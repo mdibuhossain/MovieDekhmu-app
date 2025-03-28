@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
-import { Slot, SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { SafeAreaView } from "react-native-safe-area-context";
-import GlobalProvider from "../context/GlobalProvider";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { TamaguiProvider } from "tamagui";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { tamaguiConfig } from "../tamagui.config";
@@ -49,17 +47,16 @@ const RootLayout = () => {
     <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Provider store={Store}>
-          <GlobalProvider>
-            {/* <GestureHandlerRootView className="flex-1"> */}
-            <App />
-            {/* </GestureHandlerRootView> */}
-          </GlobalProvider>
+          {/* <GlobalProvider> */}
+          {/* <GestureHandlerRootView className="flex-1"> */}
+          <App />
+          {/* </GestureHandlerRootView> */}
+          {/* </GlobalProvider> */}
         </Provider>
       </ThemeProvider>
     </TamaguiProvider>
   );
 };
-
 
 const App = () => {
   const dispatch = useDispatch();
@@ -68,13 +65,15 @@ const App = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(setUser({
-          email: user.email,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          uid: user.uid,
-          emailVerified: user.emailVerified,
-        }));
+        dispatch(
+          setUser({
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            uid: user.uid,
+            emailVerified: user.emailVerified,
+          })
+        );
         dispatch(setLoggedIn(true));
       } else {
         dispatch(setLoggedIn(false));
@@ -94,7 +93,7 @@ const App = () => {
         <Stack.Screen name="(tabs)" />
       </Stack>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 export default RootLayout;

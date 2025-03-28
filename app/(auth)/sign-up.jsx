@@ -10,9 +10,8 @@ import ScreenLayout from "../../components/ScreenLayout";
 import CustomInpurField from "../../components/CustomInpurField";
 import CustomButton from "../../components/CustomButton";
 import { images } from "../../constants";
-import { Redirect, router } from "expo-router";
+import { router } from "expo-router";
 import { signUp } from "../../lib/firebaseService";
-import { useGlobalContext } from "../../context/GlobalProvider";
 
 const initialUserInfo = {
   email: "",
@@ -106,9 +105,9 @@ const SignUp = () => {
               isLoading={isLoadingLocally}
               isDisabled={
                 formPayload.password &&
-                  formPayload.email &&
-                  formPayload.fullName &&
-                  formPayload.passwordConfirmation
+                formPayload.email &&
+                formPayload.fullName &&
+                formPayload.passwordConfirmation
                   ? false
                   : true
               }

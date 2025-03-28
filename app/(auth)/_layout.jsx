@@ -1,6 +1,5 @@
 import { Redirect, Stack } from "expo-router";
 import React from "react";
-import { useGlobalContext } from "../../context/GlobalProvider";
 import { useSelector } from "react-redux";
 
 const AuthLayout = () => {
