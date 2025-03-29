@@ -1,5 +1,4 @@
 import { ToastAndroid, View } from "react-native";
-import { useState } from "react";
 import {
   Button,
   Form,
@@ -12,23 +11,47 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown } from "../../components/Dropdown";
 import { useMemo } from "react";
-import { setForm, setLoading } from "@/redux/slices/formDataSlice";
+import {
+  setForm,
+  setLoading,
+  resetMovieForm,
+} from "@/redux/slices/formDataSlice";
+import { addMovie } from "../../lib/firebaseService";
 
 const Create = () => {
   const dispatch = useDispatch();
   const formData = useSelector((state) => state?.formData);
+  const user = useSelector((state) => state?.auth?.user);
 
-  const submitHandler = async (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
+    let isValid = true;
     Object.keys(formData?.movie).forEach((key) => {
       if (!formData?.movie[key]) {
         ToastAndroid.show(`Please fill ${key} field`, ToastAndroid.SHORT);
+        isValid = false;
       }
     });
+    if (!isValid) return;
     dispatch(setLoading(true));
-    setTimeout(() => {
-      dispatch(setLoading(false));
-    }, 2000);
+    addMovie({
+      ...formData?.movie,
+      user: {
+        displayName: user?.displayName,
+        photoURL: user?.photoURL,
+        email: user?.email,
+      },
+    })
+      .then(() => {
+        ToastAndroid.show("Movie added successfully", ToastAndroid.SHORT);
+        dispatch(resetMovieForm());
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
   };
 
   const years = useMemo(

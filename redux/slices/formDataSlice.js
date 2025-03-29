@@ -21,11 +21,14 @@ const formSlice = createSlice({
         ? action.payload.value
         : "";
     },
+    resetMovieForm(state, action) {
+      state.movie = initialState.movie;
+    },
     setLoading(state, action) {
       state.isLoading = action.payload;
     },
   },
 });
 
-export const { setForm, setLoading } = formSlice.actions;
+export const { setForm, resetMovieForm, setLoading } = formSlice.actions;
 export default formSlice.reducer;
