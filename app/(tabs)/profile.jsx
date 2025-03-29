@@ -8,6 +8,7 @@ import {
 import { useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import {
+  auth,
   logOut,
   updateUserData,
   uploadProfilePicture,
@@ -20,7 +21,13 @@ import * as ImagePicker from "expo-image-picker";
 import { FlashList } from "@shopify/flash-list";
 import CustomInpurField from "../../components/CustomInpurField";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser, setLoading, setTrigger } from "@/redux/slices/authSlice";
+import {
+  setUser,
+  setLoading,
+  setTrigger,
+  setLoggedIn,
+} from "@/redux/slices/authSlice";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -100,6 +107,29 @@ const Profile = () => {
       dispatch(setTrigger(!trigger));
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (_user) => {
+      if (_user) {
+        dispatch(
+          setUser({
+            email: _user.email,
+            displayName: _user.displayName,
+            photoURL: _user.photoURL,
+            uid: _user.uid,
+            emailVerified: _user.emailVerified,
+          })
+        );
+        dispatch(setLoggedIn(true));
+      } else {
+        dispatch(setLoggedIn(false));
+        dispatch(setUser(null));
+      }
+      dispatch(setLoading(false));
+    });
+
+    return () => unsubscribe(); // Cleanup listener on unmount
+  }, [trigger]);
 
   const items = [
     // {

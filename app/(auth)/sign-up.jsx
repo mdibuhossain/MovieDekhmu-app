@@ -12,6 +12,8 @@ import CustomButton from "../../components/CustomButton";
 import { images } from "../../constants";
 import { router } from "expo-router";
 import { signUp } from "../../lib/firebaseService";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/redux/slices/authSlice";
 
 const initialUserInfo = {
   email: "",
@@ -21,27 +23,28 @@ const initialUserInfo = {
 };
 
 const SignUp = () => {
+  const dispatch = useDispatch();
   const [formPayload, setFormPayload] = React.useState(initialUserInfo);
-  const [isLoadingLocally, setIsLoadingLocally] = React.useState(false);
+  const { isLoading } = useSelector((state) => state.auth);
 
   const handleSignUp = async () => {
     if (formPayload.password !== formPayload.passwordConfirmation) {
       alert("Passwords do not match");
       return;
     }
-    setIsLoadingLocally(true);
+    dispatch(setLoading(true));
     try {
       const { loading, data } = await signUp(
         formPayload.fullName,
         formPayload.email,
         formPayload.password
       );
-      setIsLoadingLocally(loading);
+      dispatch(setLoading(loading));
       if (data) {
         // await checkUser();
       }
     } catch (error) {
-      setIsLoadingLocally(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -100,9 +103,9 @@ const SignUp = () => {
             />
             <CustomButton
               containerStyle="h-10 justify-center items-center mt-5"
-              title={isLoadingLocally ? "Loading..." : "Sign up"}
+              title={isLoading ? "Loading..." : "Sign up"}
               handlePress={handleSignUp}
-              isLoading={isLoadingLocally}
+              isLoading={isLoading}
               isDisabled={
                 formPayload.password &&
                 formPayload.email &&

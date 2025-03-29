@@ -26,11 +26,11 @@ const TabIcon = ({ icon, color, name, focused }) => {
 
 const TabsLayout = () => {
   const TabsData = [
-    { name: "home", title: "Home", header: false, icon: icons.home },
-    { name: "explore", title: "Explore", header: false, icon: icons.compass },
-    { name: "create", title: "Create", header: false, icon: icons.plus },
-    { name: "bookmark", title: "Bookmark", header: false, icon: icons.bookmark },
-    { name: "profile", title: "Profile", header: false, icon: icons.profile },
+    { name: "home", title: "Home", header: false, icon: icons.home, href: "home" },
+    { name: "explore", title: "Explore", header: false, icon: icons.compass, href: null },
+    { name: "create", title: "Create", header: false, icon: icons.plus, href: "create" },
+    { name: "bookmark", title: "Bookmark", header: false, icon: icons.bookmark, href: null },
+    { name: "profile", title: "Profile", header: false, icon: icons.profile, href: "profile" },
   ];
 
   return (
@@ -58,6 +58,7 @@ const TabsLayout = () => {
             key={index}
             name={tabItem.name}
             options={{
+              href: tabItem.href,
               title: tabItem.title,
               headerShown: tabItem.header,
               tabBarIcon: ({ color, focused }) => (

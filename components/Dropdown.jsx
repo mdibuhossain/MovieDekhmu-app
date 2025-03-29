@@ -1,10 +1,17 @@
 import { useState } from "react";
-import { Check, ChevronDown, ChevronUp } from "@tamagui/lucide-icons";
-import { Adapt, Select, Sheet, YStack, getFontSize } from "tamagui";
+import { Check, ChevronDown, ChevronUp, SearchX } from "@tamagui/lucide-icons";
+import { Adapt, Select, Sheet, YStack, getFontSize, Input } from "tamagui";
 import { LinearGradient } from "tamagui/linear-gradient";
+import { Pressable } from "react-native";
 
 export function Dropdown(props) {
   const [val, setVal] = useState("apple");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter items based on the search query
+  const filteredItems = props.items?.filter((item) =>
+    item.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <Select
@@ -24,7 +31,7 @@ export function Dropdown(props) {
         <Select.Value color={props.color} placeholder="Something" />
       </Select.Trigger>
 
-      <Adapt when="sm" platform="touch" >
+      <Adapt when="sm" platform="touch">
         <Sheet
           native={!!props.native}
           modal
@@ -66,33 +73,56 @@ export function Dropdown(props) {
         </Select.ScrollUpButton>
 
         <Select.Viewport
-          // to do animations:
-          // animation="quick"
-          // animateOnly={['transform', 'opacity']}
-          // enterStyle={{ o: 0, y: -10 }}
-          // exitStyle={{ o: 0, y: 10 }}
+          animation="quick"
+          animateOnly={["transform", "opacity"]}
+          enterStyle={{ o: 0, y: -10 }}
+          exitStyle={{ o: 0, y: 10 }}
           minWidth={200}
         >
+          {/* Search Box */}
+          {props.searchable && (
+            <YStack
+              padding="$2"
+              flexDirection="row"
+              alignItems="center"
+              backgroundColor="$background"
+              borderBottomWidth={1}
+              borderBottomColor="$borderColor"
+            >
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                width="90%"
+                borderColor="$borderColor"
+                borderWidth={1}
+                borderRadius="$4"
+                padding="$2"
+              />
+              <Pressable
+                className="cursor-pointer flex-1 items-center justify-center"
+                onPress={() => setSearchQuery("")}
+              >
+                <SearchX size={20} />
+              </Pressable>
+            </YStack>
+          )}
           <Select.Group>
-            <Select.Label>Fruits</Select.Label>
-            {/* for longer lists memoizing these is useful */}
+            <Select.Label>{props.label}</Select.Label>
+            {/* Render filtered items */}
             {React.useMemo(
               () =>
-                items.map((item, i) => {
+                filteredItems?.map((item, i) => {
                   return (
-                    <Select.Item
-                      index={i}
-                      key={item.name}
-                      value={item.name.toLowerCase()}
-                    >
-                      <Select.ItemText>{item.name}</Select.ItemText>
+                    <Select.Item index={i} key={item} value={item}>
+                      <Select.ItemText>{item.toLowerCase()}</Select.ItemText>
                       <Select.ItemIndicator marginLeft="auto">
                         <Check size={16} />
                       </Select.ItemIndicator>
                     </Select.Item>
                   );
                 }),
-              [items]
+              [filteredItems]
             )}
           </Select.Group>
           {/* Native gets an extra icon */}
@@ -134,28 +164,3 @@ export function Dropdown(props) {
     </Select>
   );
 }
-
-const items = [
-  { name: "Apple" },
-  { name: "Pear" },
-  { name: "Blackberry" },
-  { name: "Peach" },
-  { name: "Apricot" },
-  { name: "Melon" },
-  { name: "Honeydew" },
-  { name: "Starfruit" },
-  { name: "Blueberry" },
-  { name: "Raspberry" },
-  { name: "Strawberry" },
-  { name: "Mango" },
-  { name: "Pineapple" },
-  { name: "Lime" },
-  { name: "Lemon" },
-  { name: "Coconut" },
-  { name: "Guava" },
-  { name: "Papaya" },
-  { name: "Orange" },
-  { name: "Grape" },
-  { name: "Jackfruit" },
-  { name: "Durian" },
-];
