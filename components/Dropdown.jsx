@@ -3,9 +3,12 @@ import { Check, ChevronDown, ChevronUp, SearchX } from "@tamagui/lucide-icons";
 import { Adapt, Select, Sheet, YStack, getFontSize, Input } from "tamagui";
 import { LinearGradient } from "tamagui/linear-gradient";
 import { Pressable } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { setForm } from "@/redux/slices/formDataSlice";
 
 export function Dropdown(props) {
-  const [val, setVal] = useState("apple");
+  const dispatch = useDispatch();
+  const formData = useSelector((state) => state?.formData);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Filter items based on the search query
@@ -15,8 +18,10 @@ export function Dropdown(props) {
 
   return (
     <Select
-      value={val}
-      onValueChange={setVal}
+      value={formData["movie"][props.name]}
+      onValueChange={(e) =>
+        dispatch(setForm({ index: "movie", key: props.name, value: e }))
+      }
       disablePreventBodyScroll
       {...props}
     >
@@ -98,13 +103,16 @@ export function Dropdown(props) {
                 borderWidth={1}
                 borderRadius="$4"
                 padding="$2"
+                className="flex-1"
               />
-              <Pressable
-                className="cursor-pointer flex-1 items-center justify-center"
-                onPress={() => setSearchQuery("")}
-              >
-                <SearchX size={20} />
-              </Pressable>
+              {searchQuery && (
+                <Pressable
+                  className="cursor-pointer ml-2 px-2"
+                  onPress={() => setSearchQuery("")}
+                >
+                  <SearchX size={20} />
+                </Pressable>
+              )}
             </YStack>
           )}
           <Select.Group>
@@ -115,7 +123,7 @@ export function Dropdown(props) {
                 filteredItems?.map((item, i) => {
                   return (
                     <Select.Item index={i} key={item} value={item}>
-                      <Select.ItemText>{item.toLowerCase()}</Select.ItemText>
+                      <Select.ItemText>{item?.toUpperCase()}</Select.ItemText>
                       <Select.ItemIndicator marginLeft="auto">
                         <Check size={16} />
                       </Select.ItemIndicator>
