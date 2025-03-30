@@ -1,17 +1,24 @@
-import { Text, View } from "react-native";
+import { RefreshControl, Text, View } from "react-native";
 import CustomInpurField from "../../components/CustomInpurField";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { AntDesign } from "@expo/vector-icons";
 import {
   Button,
   Card,
   H4,
+  H5,
+  H6,
   Paragraph,
+  ScrollView,
   Separator,
   XStack,
 } from "tamagui";
 import { FlashList } from "@shopify/flash-list";
+import { getMovies } from "../../lib/firebaseService";
+import { useDispatch, useSelector } from "react-redux";
+import { setDataByIndex, setLoading } from "@/redux/slices/dataSlice";
+import { dropdownItems } from "../../utils/dropdownItems";
 
 const data = [
   { label: "Item 1", value: "1" },
@@ -22,9 +29,47 @@ const data = [
   { label: "Item 6", value: "6" },
   { label: "Item 7", value: "7" },
   { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
+  { label: "Item 8", value: "8" },
 ];
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const { movies, isLoading } = useSelector((state) => state?.data);
+
+  const fetchData = (filter) => {
+    dispatch(setLoading(true));
+    try {
+      getMovies(filter)
+        .then((res) => {
+          dispatch(setDataByIndex({ index: "movies", value: res }));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  useEffect(() => {
+    fetchData({});
+  }, []);
+
   return (
     <View className="bg-primary flex-1">
       <View className=" px-3">
@@ -32,30 +77,25 @@ const Home = () => {
           placeholder="Search"
           inputFieldStyle="!rounded-full"
         />
-        <XStack
-          gap={10}
-          paddingTop={10}
-          alignItems="center"
-          alignSelf="flex-start"
-        >
-          <CustomDropdown />
-          <CustomDropdown />
-          <Button
-            size="$1.5"
-            fontSize={11}
-            alignSelf="flex-end"
-            animation={"bouncy"}
-          >
-            Reset
-          </Button>
-        </XStack>
-        <Separator marginVertical={10} borderColor={"gray"} />
+        <View className="flex-row justify-between items-center mt-2">
+          <ScrollView horizontal>
+            <XStack gap={10} alignItems="center" className="pb-2">
+              <CustomDropdown items={dropdownItems.review} />
+              <CustomDropdown items={dropdownItems.origin} />
+              <CustomDropdown items={dropdownItems.year} />
+              <CustomDropdown items={dropdownItems.filmType} />
+              <CustomDropdown items={dropdownItems.subType} />
+              <Button className="flex items-center justify-center p-0 h-6 w-14">
+                <Text>Reset</Text>
+              </Button>
+            </XStack>
+          </ScrollView>
+        </View>
+        <Separator borderColor={"gray"}  />
       </View>
 
       <FlashList
-        data={[
-          1, 2, 3, 4, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        ]}
+        data={movies}
         contentContainerStyle={{
           paddingTop: 5,
           paddingRight: 10,
@@ -64,18 +104,34 @@ const Home = () => {
         }}
         estimatedItemSize={15}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={(item) => (
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={fetchData}
+            colors={["#FF9C01"]}
+          />
+        }
+        renderItem={({ item, _index }) => (
           <Card
             elevate
             size="$1"
-            className="bg-gray-800 px-2 rounded-md"
+            className="bg-gray-800 px-2 py-1 rounded-md my-0.5"
             onPress={() => {
               console.log("click");
             }}
           >
-            <Card.Header padded>
-              <H4 className="text-white">Iron Man</H4>
-              <Paragraph theme="alt2">Now available</Paragraph>
+            <Card.Header className="flex-col items-start gap-1">
+              <View className="flex-row flex-1 items-start text-white text-sm font-[MavenPro-Regular]">
+                <Text className="flex-1 color-white leading-5">
+                  {item?.title}
+                </Text>
+                <Text className="color-gray-400/80 text-xs">
+                  {item?.filmType} ({item?.subType})
+                </Text>
+              </View>
+              <Text className="text-xs text-gray-400 font-[MavenPro-Regular]">
+                {item?.review?.toUpperCase()} - {item?.origin} - {item?.year}
+              </Text>
             </Card.Header>
           </Card>
         )}
@@ -84,33 +140,29 @@ const Home = () => {
   );
 };
 
-const CustomDropdown = () => {
+const CustomDropdown = ({ items }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
 
   const renderItem = (item) => {
     return (
-      <View className="flex-row justify-between p-2">
-        <Text>{item.label}</Text>
-        {item.value === value && (
-          <AntDesign color="black" name="Safety" size={20} />
-        )}
+      <View className="flex-row justify-between bg-gray-600/50 p-2">
+        <Text>{item}</Text>
+        {item === value && <AntDesign color="black" name="Safety" size={20} />}
       </View>
     );
   };
+
   return (
     <Dropdown
-      data={data}
+      data={items}
       value={value}
-      placeholder="Review"
-      labelField="label"
-      valueField="value"
       selectedTextStyle={{ color: "white", fontSize: 10 }}
       placeholderStyle={{ color: "white", fontSize: 10 }}
       containerStyle={{ width: "100%", left: 0 }}
       style={{
         width: 100,
-        height: 25,
+        height: 30,
         borderWidth: 1,
         borderRadius: 200,
         paddingHorizontal: 10,
@@ -119,18 +171,18 @@ const CustomDropdown = () => {
       }}
       onFocus={() => setIsFocus(true)}
       onBlur={() => setIsFocus(false)}
-      onChange={(item) => {
-        setValue(item.value);
+      onChange={(e) => {
+        setValue(e);
         setIsFocus(false);
       }}
       renderItem={renderItem}
-    // renderLeftIcon={() => (
-    //   <AntDesign
-    //     color={isFocus ? "blue" : "black"}
-    //     name="Review"
-    //     size={20}
-    //   />
-    // )}
+      // renderLeftIcon={() => (
+      //   <AntDesign
+      //     color={isFocus ? "blue" : "black"}
+      //     name="Review"
+      //     size={20}
+      //   />
+      // )}
     />
   );
 };

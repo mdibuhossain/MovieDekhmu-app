@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Check, ChevronDown, ChevronUp, SearchX } from "@tamagui/lucide-icons";
-import { Adapt, Select, Sheet, YStack, getFontSize, Input } from "tamagui";
+import { Check, ChevronDown, ChevronUp } from "@tamagui/lucide-icons";
+import { Adapt, Select, Sheet, YStack, getFontSize } from "tamagui";
 import { LinearGradient } from "tamagui/linear-gradient";
-import { Pressable } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setForm } from "@/redux/slices/formDataSlice";
+import { dropdownItems } from "../utils/dropdownItems";
 
 export function Dropdown(props) {
   const dispatch = useDispatch();
@@ -12,15 +12,15 @@ export function Dropdown(props) {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Filter items based on the search query
-  const filteredItems = props.items?.filter((item) =>
+  const filteredItems = dropdownItems[props?.name]?.filter((item) =>
     item.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <Select
-      value={formData["movie"][props.name]}
+      value={formData[props?.index][props?.name]}
       onValueChange={(e) =>
-        dispatch(setForm({ index: "movie", key: props.name, value: e }))
+        dispatch(setForm({ index: props?.index, key: props?.name, value: e }))
       }
       disablePreventBodyScroll
       {...props}
@@ -28,17 +28,17 @@ export function Dropdown(props) {
       <Select.Trigger
         width="100%"
         iconAfter={ChevronDown}
-        color={props.color}
-        backgroundColor={props.backgroundColor}
+        color={props?.color}
+        backgroundColor={props?.backgroundColor}
         focusStyle={{ backgroundColor: "$shadowColor" }}
-        focusVisibleStyle={{ backgroundColor: props.backgroundColor }}
+        focusVisibleStyle={{ backgroundColor: props?.backgroundColor }}
       >
-        <Select.Value color={props.color} placeholder="Something" />
+        <Select.Value color={props?.color} placeholder="Something" />
       </Select.Trigger>
 
       <Adapt when="sm" platform="touch">
         <Sheet
-          native={!!props.native}
+          native={!!props?.native}
           modal
           dismissOnSnapToBottom
           animation="medium"
@@ -85,7 +85,7 @@ export function Dropdown(props) {
           minWidth={200}
         >
           {/* Search Box */}
-          {props.searchable && (
+          {/* {props?.searchable && (
             <YStack
               padding="$2"
               flexDirection="row"
@@ -114,13 +114,14 @@ export function Dropdown(props) {
                 </Pressable>
               )}
             </YStack>
-          )}
+          )} */}
+
           <Select.Group>
-            <Select.Label>{props.label}</Select.Label>
+            <Select.Label>{props?.label}</Select.Label>
             {/* Render filtered items */}
             {React.useMemo(
               () =>
-                filteredItems?.map((item, i) => {
+                dropdownItems[props?.name]?.map((item, i) => {
                   return (
                     <Select.Item index={i} key={item} value={item}>
                       <Select.ItemText>{item?.toUpperCase()}</Select.ItemText>
@@ -130,11 +131,11 @@ export function Dropdown(props) {
                     </Select.Item>
                   );
                 }),
-              [filteredItems]
+              [dropdownItems[props?.name]]
             )}
           </Select.Group>
           {/* Native gets an extra icon */}
-          {props.native && (
+          {props?.native && (
             <YStack
               position="absolute"
               right={0}
@@ -145,7 +146,7 @@ export function Dropdown(props) {
               width={"$4"}
               pointerEvents="none"
             >
-              <ChevronDown size={getFontSize(props.size ?? "$true")} />
+              <ChevronDown size={getFontSize(props?.size ?? "$true")} />
             </YStack>
           )}
         </Select.Viewport>
