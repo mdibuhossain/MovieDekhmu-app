@@ -91,7 +91,7 @@ const Home = () => {
             </XStack>
           </ScrollView>
         </View>
-        <Separator borderColor={"gray"}  />
+        <Separator borderColor={"gray"} />
       </View>
 
       <FlashList
