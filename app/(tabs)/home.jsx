@@ -1,49 +1,13 @@
 import { RefreshControl, Text, View } from "react-native";
 import CustomInpurField from "../../components/CustomInpurField";
-import { useEffect, useMemo, useState } from "react";
-import { Dropdown } from "react-native-element-dropdown";
-import { AntDesign } from "@expo/vector-icons";
-import {
-  Button,
-  Card,
-  H4,
-  H5,
-  H6,
-  Paragraph,
-  ScrollView,
-  Separator,
-  XStack,
-} from "tamagui";
+import { useEffect } from "react";
+import { Button, Card, ScrollView, Separator, XStack } from "tamagui";
 import { FlashList } from "@shopify/flash-list";
 import { getMovies } from "../../lib/firebaseService";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataByIndex, setLoading } from "@/redux/slices/dataSlice";
 import { dropdownItems } from "../../utils/dropdownItems";
-
-const data = [
-  { label: "Item 1", value: "1" },
-  { label: "Item 2", value: "2" },
-  { label: "Item 3", value: "3" },
-  { label: "Item 4", value: "4" },
-  { label: "Item 5", value: "5" },
-  { label: "Item 6", value: "6" },
-  { label: "Item 7", value: "7" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-  { label: "Item 8", value: "8" },
-];
+import CustomDropdown from "../../components/CustomDropdown";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -80,11 +44,24 @@ const Home = () => {
         <View className="flex-row justify-between items-center mt-2">
           <ScrollView horizontal>
             <XStack gap={10} alignItems="center" className="pb-2">
-              <CustomDropdown items={dropdownItems.review} />
-              <CustomDropdown items={dropdownItems.origin} />
-              <CustomDropdown items={dropdownItems.year} />
-              <CustomDropdown items={dropdownItems.filmType} />
-              <CustomDropdown items={dropdownItems.subType} />
+              <CustomDropdown
+                items={dropdownItems.review}
+                placeholder="Review"
+              />
+              <CustomDropdown
+                items={dropdownItems.origin}
+                search={true}
+                placeholder="Origin"
+              />
+              <CustomDropdown items={dropdownItems.year} placeholder="Year" />
+              <CustomDropdown
+                items={dropdownItems.filmType}
+                placeholder="Type"
+              />
+              <CustomDropdown
+                items={dropdownItems.subType}
+                placeholder="Sub type"
+              />
               <Button className="flex items-center justify-center p-0 h-6 w-14">
                 <Text>Reset</Text>
               </Button>
@@ -137,53 +114,6 @@ const Home = () => {
         )}
       />
     </View>
-  );
-};
-
-const CustomDropdown = ({ items }) => {
-  const [value, setValue] = useState(null);
-  const [isFocus, setIsFocus] = useState(false);
-
-  const renderItem = (item) => {
-    return (
-      <View className="flex-row justify-between bg-gray-600/50 p-2">
-        <Text>{item}</Text>
-        {item === value && <AntDesign color="black" name="Safety" size={20} />}
-      </View>
-    );
-  };
-
-  return (
-    <Dropdown
-      data={items}
-      value={value}
-      selectedTextStyle={{ color: "white", fontSize: 10 }}
-      placeholderStyle={{ color: "white", fontSize: 10 }}
-      containerStyle={{ width: "100%", left: 0 }}
-      style={{
-        width: 100,
-        height: 30,
-        borderWidth: 1,
-        borderRadius: 200,
-        paddingHorizontal: 10,
-        backgroundColor: "black",
-        borderColor: isFocus ? "orange" : "gray",
-      }}
-      onFocus={() => setIsFocus(true)}
-      onBlur={() => setIsFocus(false)}
-      onChange={(e) => {
-        setValue(e);
-        setIsFocus(false);
-      }}
-      renderItem={renderItem}
-      // renderLeftIcon={() => (
-      //   <AntDesign
-      //     color={isFocus ? "blue" : "black"}
-      //     name="Review"
-      //     size={20}
-      //   />
-      // )}
-    />
   );
 };
 
