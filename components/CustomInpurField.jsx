@@ -1,12 +1,16 @@
 import { View, Text } from "react-native";
-import React from "react";
+import { useState } from "react";
 import { Input } from "tamagui";
+import { useDispatch, useSelector } from "react-redux";
+import { setForm } from "@/redux/slices/formDataSlice";
 
 const CustomInpurField = (props) => {
   const {
+    name,
     type,
     label,
     value,
+    index,
     setValue,
     labelStyle,
     placeholder,
@@ -18,8 +22,9 @@ const CustomInpurField = (props) => {
     inputFieldContainerStyle,
     ...rest
   } = props;
-
-  const [inputValue, setInputValue] = React.useState("");
+  const dispatch = useDispatch();
+  const formData = useSelector((state) => state?.formData);
+  const [inputValue, setInputValue] = useState("");
 
   const cbProcessInputValue = () => {
     return new Promise((resolve, resject) => {
@@ -30,16 +35,24 @@ const CustomInpurField = (props) => {
   return (
     <View className={`w-full ${containerStyle}`}>
       {label && <Text className={`text-gray-400 ${labelStyle}`}>{label}</Text>}
-      <View className={`w-full mt-2 flex-row ${specialStyle}`}>
+      <View className={`w-full flex-row ${specialStyle}`}>
         <View className={`w-full h-11 ${inputFieldContainerStyle}`}>
           <Input
             type={type}
             placeholder={placeholder}
-            value={value || inputValue}
+            value={
+              index && index !== ""
+                ? formData?.[index]?.[name]
+                : value || inputValue
+            }
             secureTextEntry={type === "password"}
-            onChangeText={handleChangeText || setInputValue}
+            onChangeText={
+              index && index !== ""
+                ? (e) => dispatch(setForm({ index, key: name, value: e }))
+                : handleChangeText || setInputValue
+            }
             keyboardType={type === "email" ? "email-address" : "default"}
-            className={`flex-1 text-base text-gray-300 border-gray-400 bg-transparent rounded-none ${inputFieldStyle}`}
+            className={`flex-1 text-base text-gray-300 border-gray-400/80 bg-transparent rounded-none ${inputFieldStyle}`}
           />
         </View>
         {GroupedButton && <GroupedButton cbFn={cbProcessInputValue} />}

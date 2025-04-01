@@ -39,6 +39,7 @@ const Home = () => {
         <CustomInpurField
           placeholder="Search"
           inputFieldStyle="!rounded-full"
+          containerStyle="mt-2"
         />
         <View className="flex-row justify-between items-center mt-2">
           <ScrollView horizontal>
@@ -93,11 +94,15 @@ const Home = () => {
         }
         renderItem={({ item, _index }) => (
           <Card
+            key={_index}
             elevate
             size="$1"
             className="bg-gray-800 px-2 py-1 rounded-md my-0.5"
             onPress={() => {
               console.log("click");
+            }}
+            onLongPress={() => {
+              console.log("long click");
             }}
           >
             <Card.Header className="flex-col items-start gap-1">

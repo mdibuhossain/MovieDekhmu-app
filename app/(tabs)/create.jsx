@@ -18,6 +18,7 @@ import {
 import { addMovie } from "../../lib/firebaseService";
 import { FontAwesome6 } from "@expo/vector-icons";
 import CustomDropdown from "../../components/CustomDropdown";
+import CustomInpurField from "../../components/CustomInpurField";
 
 const Create = () => {
   const dispatch = useDispatch();
@@ -26,14 +27,12 @@ const Create = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    let isValid = true;
-    Object.keys(formData?.movie).forEach((key) => {
+    for (const key in formData?.movie) {
       if (!formData?.movie[key]) {
         ToastAndroid.show(`Please fill ${key} field`, ToastAndroid.SHORT);
-        isValid = false;
+        return;
       }
-    });
-    if (!isValid) return;
+    }
     dispatch(setLoading(true));
     addMovie({
       ...formData?.movie,
@@ -72,14 +71,10 @@ const Create = () => {
         <Form onSubmit={submitHandler}>
           <YStack>
             <Label color="white">Movie title</Label>
-            <Input
-              minWidth="100%"
-              backgroundColor="transparent"
-              color="white"
-              value={formData?.movie?.title}
-              onChangeText={(e) =>
-                dispatch(setForm({ index: "movie", key: "title", value: e }))
-              }
+            <CustomInpurField
+              index="movie"
+              name="title"
+              inputFieldStyle="rounded-lg"
             />
           </YStack>
           <View className="flex-row w-full">
@@ -190,7 +185,10 @@ const Create = () => {
           <Form.Trigger asChild disabled={formData?.isLoading} className="my-5">
             <Button
               icon={formData?.isLoading ? () => <Spinner /> : null}
-              className="bg-secondary text-white"
+              className={`bg-gray-800 text-white ${
+                formData?.isLoading ? "opacity-50" : ""
+              }`}
+              disabled={formData?.isLoading}
             >
               Submit
             </Button>
