@@ -6,7 +6,6 @@ import { FlashList } from "@shopify/flash-list";
 import { getMovies } from "../../lib/firebaseService";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataByIndex, setLoading } from "@/redux/slices/dataSlice";
-import { dropdownItems } from "../../utils/dropdownItems";
 import CustomDropdown from "../../components/CustomDropdown";
 
 const Home = () => {
@@ -45,22 +44,26 @@ const Home = () => {
           <ScrollView horizontal>
             <XStack gap={10} alignItems="center" className="pb-2">
               <CustomDropdown
-                items={dropdownItems.review}
                 placeholder="Review"
+                index="filter"
+                name="review"
               />
               <CustomDropdown
-                items={dropdownItems.origin}
                 search={true}
                 placeholder="Origin"
+                index="filter"
+                name="origin"
               />
-              <CustomDropdown items={dropdownItems.year} placeholder="Year" />
+              <CustomDropdown placeholder="Year" index="filter" name="year" />
               <CustomDropdown
-                items={dropdownItems.filmType}
-                placeholder="Type"
+                placeholder="Film type"
+                index="filter"
+                name="filmType"
               />
               <CustomDropdown
-                items={dropdownItems.subType}
                 placeholder="Sub type"
+                index="filter"
+                name="subType"
               />
               <Button className="flex items-center justify-center p-0 h-6 w-14">
                 <Text>Reset</Text>

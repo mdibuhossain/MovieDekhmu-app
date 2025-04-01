@@ -10,7 +10,6 @@ import {
   YStack,
 } from "tamagui";
 import { useDispatch, useSelector } from "react-redux";
-import { Dropdown } from "../../components/Dropdown";
 import {
   setForm,
   setLoading,
@@ -18,6 +17,7 @@ import {
 } from "@/redux/slices/formDataSlice";
 import { addMovie } from "../../lib/firebaseService";
 import { FontAwesome6 } from "@expo/vector-icons";
+import CustomDropdown from "../../components/CustomDropdown";
 
 const Create = () => {
   const dispatch = useDispatch();
@@ -85,57 +85,105 @@ const Create = () => {
           <View className="flex-row w-full">
             <YStack className="mr-2">
               <Label color="white">Year</Label>
-              <Dropdown
-                color="white"
-                backgroundColor="transparent"
-                label="Year"
-                name="year"
+              <CustomDropdown
+                placeholder="Review"
                 index="movie"
+                name="year"
+                style={{
+                  height: 44,
+                  backgroundColor: "transparent",
+                  borderRadius: 8,
+                }}
+                placeholderStyle={{
+                  fontSize: 13,
+                }}
+                selectedTextStyle={{
+                  fontSize: 13,
+                }}
               />
             </YStack>
             <YStack className="flex-1">
               <Label color="white">Origin</Label>
-              <Dropdown
-                color="white"
-                backgroundColor="transparent"
-                label="Origin"
-                name="origin"
+              <CustomDropdown
+                search={true}
                 index="movie"
-                searchable
+                name="origin"
+                placeholder="Origin"
+                style={{
+                  height: 44,
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  borderRadius: 8,
+                }}
+                placeholderStyle={{
+                  fontSize: 13,
+                }}
+                selectedTextStyle={{
+                  fontSize: 13,
+                }}
               />
             </YStack>
           </View>
           <View className="flex-row w-full">
             <YStack className="flex-1 mr-2">
               <Label color="white">Film type</Label>
-              <Dropdown
-                color="white"
-                backgroundColor="transparent"
-                label="Film type"
-                name="filmType"
+              <CustomDropdown
                 index="movie"
+                name="filmType"
+                placeholder="Film type"
+                style={{
+                  height: 44,
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  borderRadius: 8,
+                }}
+                placeholderStyle={{
+                  fontSize: 13,
+                }}
+                selectedTextStyle={{
+                  fontSize: 13,
+                }}
               />
             </YStack>
             <YStack>
               <Label color="white">Type</Label>
-              <Dropdown
-                color="white"
-                backgroundColor="transparent"
-                label="Type"
-                name="subType"
+              <CustomDropdown
                 index="movie"
+                name="subType"
+                placeholder="Sub type"
+                style={{
+                  height: 44,
+                  backgroundColor: "transparent",
+                  borderRadius: 8,
+                }}
+                placeholderStyle={{
+                  fontSize: 13,
+                }}
+                selectedTextStyle={{
+                  fontSize: 13,
+                }}
               />
             </YStack>
           </View>
 
           <YStack>
             <Label color="white">Review</Label>
-            <Dropdown
-              color="white"
-              backgroundColor="transparent"
-              label="Review"
-              name="review"
+            <CustomDropdown
+              placeholder="Review"
               index="movie"
+              name="review"
+              style={{
+                height: 44,
+                width: "100%",
+                backgroundColor: "transparent",
+                borderRadius: 8,
+              }}
+              placeholderStyle={{
+                fontSize: 13,
+              }}
+              selectedTextStyle={{
+                fontSize: 13,
+              }}
             />
           </YStack>
 

@@ -3,6 +3,9 @@ import { Text } from "react-native";
 import { View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Dropdown } from "react-native-element-dropdown";
+import { useDispatch, useSelector } from "react-redux";
+import { setForm } from "@/redux/slices/formDataSlice";
+import { dropdownItems } from "../utils/dropdownItems";
 
 const ListItem = memo(({ item, value }) => {
   return (
@@ -16,6 +19,8 @@ const ListItem = memo(({ item, value }) => {
 });
 
 const CustomDropdown = ({
+  name,
+  index,
   items,
   style,
   search,
@@ -23,18 +28,20 @@ const CustomDropdown = ({
   containerStyle,
   placeholderStyle,
   selectedTextStyle,
+  itemContainerStyle,
 }) => {
-  const [value, setValue] = useState(null);
+  const dispatch = useDispatch();
+  const formData = useSelector((state) => state?.formData);
   const [isFocus, setIsFocus] = useState(false);
 
   const renderItem = (item) => {
-    return <ListItem item={item} value={value} />;
+    return <ListItem item={item} value={formData?.[index]?.[name]} />;
   };
 
   return (
     <Dropdown
-      data={items}
-      value={value}
+      data={dropdownItems?.[name] ?? items}
+      value={formData?.[index]?.[name]}
       search={search}
       labelField="label"
       valueField="value"
@@ -44,8 +51,8 @@ const CustomDropdown = ({
       onFocus={() => setIsFocus(true)}
       onBlur={() => setIsFocus(false)}
       onChange={(e) => {
-        setValue(e.value);
         setIsFocus(false);
+        dispatch(setForm({ index, key: name, value: e.value }));
       }}
       style={{
         width: 100,
@@ -57,7 +64,7 @@ const CustomDropdown = ({
         borderColor: isFocus ? "orange" : "gray",
         ...style,
       }}
-      itemContainerStyle={{}}
+      itemContainerStyle={{ ...itemContainerStyle }}
       containerStyle={{ width: "100%", left: 0, ...containerStyle }}
       placeholderStyle={{ color: "white", fontSize: 10, ...placeholderStyle }}
       selectedTextStyle={{ color: "white", fontSize: 10, ...selectedTextStyle }}

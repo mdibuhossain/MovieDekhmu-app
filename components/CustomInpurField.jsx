@@ -1,4 +1,4 @@
-import { View, Text, TextInput } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
 import { Input } from "tamagui";
 
@@ -31,7 +31,7 @@ const CustomInpurField = (props) => {
     <View className={`w-full ${containerStyle}`}>
       {label && <Text className={`text-gray-400 ${labelStyle}`}>{label}</Text>}
       <View className={`w-full mt-2 flex-row ${specialStyle}`}>
-        <View className={`w-full h-10 ${inputFieldContainerStyle}`}>
+        <View className={`w-full h-11 ${inputFieldContainerStyle}`}>
           <Input
             type={type}
             placeholder={placeholder}

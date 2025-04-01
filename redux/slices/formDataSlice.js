@@ -9,6 +9,14 @@ const initialState = {
     subType: "",
     review: "",
   },
+  filter: {
+    title: "",
+    review: "",
+    origin: "",
+    year: "",
+    filmType: "",
+    subType: "",
+  },
   isLoading: false,
 };
 
