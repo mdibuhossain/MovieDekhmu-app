@@ -15,6 +15,7 @@ import {
 import { auth } from "@/lib/firebaseService";
 import { onAuthStateChanged } from "firebase/auth";
 import { setLoggedIn, setLoading, setUser } from "@/redux/slices/authSlice";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -48,9 +49,9 @@ const RootLayout = () => {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Provider store={Store}>
           {/* <GlobalProvider> */}
-          {/* <GestureHandlerRootView className="flex-1"> */}
-          <App />
-          {/* </GestureHandlerRootView> */}
+          <GestureHandlerRootView className="flex-1">
+            <App />
+          </GestureHandlerRootView>
           {/* </GlobalProvider> */}
         </Provider>
       </ThemeProvider>

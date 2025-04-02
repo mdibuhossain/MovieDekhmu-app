@@ -32,11 +32,15 @@ const formSlice = createSlice({
     resetMovieForm(state, action) {
       state.movie = initialState.movie;
     },
+    resetFilterForm(state, action) {
+      state.filter = initialState.filter;
+    },
     setLoading(state, action) {
       state.isLoading = action.payload;
     },
   },
 });
 
-export const { setForm, resetMovieForm, setLoading } = formSlice.actions;
+export const { setForm, resetMovieForm, resetFilterForm, setLoading } =
+  formSlice.actions;
 export default formSlice.reducer;

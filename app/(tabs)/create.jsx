@@ -2,7 +2,6 @@ import { ToastAndroid, View } from "react-native";
 import {
   Button,
   Form,
-  Input,
   Label,
   ScrollView,
   Spinner,
@@ -10,11 +9,7 @@ import {
   YStack,
 } from "tamagui";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setForm,
-  setLoading,
-  resetMovieForm,
-} from "@/redux/slices/formDataSlice";
+import { setLoading, resetMovieForm } from "@/redux/slices/formDataSlice";
 import { addMovie } from "../../lib/firebaseService";
 import { FontAwesome6 } from "@expo/vector-icons";
 import CustomDropdown from "../../components/CustomDropdown";

@@ -1,8 +1,10 @@
-import { View, Text, Button, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import React from "react";
 
 const CustomButton = ({
+  icon,
   title,
+  style,
   textStyle,
   isLoading,
   isDisabled,
@@ -15,14 +17,25 @@ const CustomButton = ({
       className={`${
         isLoading || isDisabled ? "bg-gray-600" : "bg-secondary"
       } rounded-xl ${containerStyle} ${isLoading ? "opacity-75" : ""}`}
+      style={{ ...style }}
       activeOpacity={0.8}
       disabled={isLoading || isDisabled}
     >
-      <Text
-        className={`text-primary font-mPbold text-lg text-center ${textStyle}`}
-      >
-        {title}
-      </Text>
+      {icon && title ? (
+        <Text
+          className={`text-primary font-mPbold text-lg text-center ${textStyle}`}
+        >
+          {icon} {title}
+        </Text>
+      ) : icon ? (
+        icon
+      ) : title ? (
+        <Text
+          className={`text-primary font-mPbold text-lg text-center ${textStyle}`}
+        >
+          {title}
+        </Text>
+      ) : null}
     </TouchableOpacity>
   );
 };

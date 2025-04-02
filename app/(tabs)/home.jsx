@@ -1,16 +1,28 @@
-import { RefreshControl, Text, View } from "react-native";
+import {
+  RefreshControl,
+  ScrollView,
+  Text,
+  TouchableHighlight,
+  View,
+} from "react-native";
 import CustomInpurField from "../../components/CustomInpurField";
-import { useEffect } from "react";
-import { Button, Card, ScrollView, Separator, XStack } from "tamagui";
+import { useEffect, useRef } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { getMovies } from "../../lib/firebaseService";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataByIndex, setLoading } from "@/redux/slices/dataSlice";
+import { resetFilterForm } from "@/redux/slices/formDataSlice";
 import CustomDropdown from "../../components/CustomDropdown";
+import CustomButton from "../../components/CustomButton";
+import { Swipeable } from "react-native-gesture-handler";
+import Feather from "@expo/vector-icons/Feather";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { movies, isLoading } = useSelector((state) => state?.data);
+  const swipeableRefs = useRef([]);
+  const swipeableRef = useRef(null);
 
   const fetchData = (filter) => {
     dispatch(setLoading(true));
@@ -33,6 +45,33 @@ const Home = () => {
     fetchData({});
   }, []);
 
+  const renderRightActions = () => {
+    return (
+      <View
+        className="flex-row items-center justify-center"
+        style={{ gap: 8, width: 100 }}
+      >
+        <CustomButton
+          containerStyle="bg-gray-600 p-[8] rounded-full"
+          icon={<Feather name="edit" size={20} color="white" />}
+        />
+        <CustomButton
+          containerStyle="bg-gray-600 p-[8] rounded-full"
+          icon={<AntDesign name="delete" size={20} color="white" />}
+        />
+      </View>
+    );
+  };
+
+  const handleSwipeOpen = (index) => {
+    const openedSwipeableRef = swipeableRefs.current[index];
+    swipeableRefs.current.forEach((swipeableRef) => {
+      if (swipeableRef && swipeableRef !== openedSwipeableRef) {
+        swipeableRef.close();
+      }
+    });
+  };
+
   return (
     <View className="bg-primary flex-1">
       <View className=" px-3">
@@ -42,8 +81,8 @@ const Home = () => {
           containerStyle="mt-2"
         />
         <View className="flex-row justify-between items-center mt-2">
-          <ScrollView horizontal>
-            <XStack gap={10} alignItems="center" className="pb-2">
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View style={{ flexDirection: "row", gap: 6 }} className="mb-2">
               <CustomDropdown
                 placeholder="Review"
                 index="filter"
@@ -66,13 +105,16 @@ const Home = () => {
                 index="filter"
                 name="subType"
               />
-              <Button className="flex items-center justify-center p-0 h-6 w-14">
-                <Text>Reset</Text>
-              </Button>
-            </XStack>
+              <CustomButton
+                title="Reset"
+                containerStyle="w-14 h-7 justify-center items-center"
+                textStyle="text-sm"
+                handlePress={() => dispatch(resetFilterForm())}
+              />
+            </View>
           </ScrollView>
         </View>
-        <Separator borderColor={"gray"} />
+        <View className="h-[1.5] w-full bg-gray-600" />
       </View>
 
       <FlashList
@@ -92,34 +134,45 @@ const Home = () => {
             colors={["#FF9C01"]}
           />
         }
-        renderItem={({ item, _index }) => (
-          <Card
-            key={_index}
-            elevate
-            size="$1"
-            className="bg-gray-800 px-2 py-1 rounded-md my-0.5"
-            onPress={() => {
-              console.log("click");
-            }}
-            onLongPress={() => {
-              console.log("long click");
-            }}
-          >
-            <Card.Header className="flex-col items-start gap-1">
-              <View className="flex-row flex-1 items-start text-white text-sm font-[MavenPro-Regular]">
-                <Text className="flex-1 color-white leading-5">
-                  {item?.title}
-                </Text>
-                <Text className="color-gray-400/80 text-xs">
-                  {item?.filmType} ({item?.subType})
-                </Text>
-              </View>
-              <Text className="text-xs text-gray-400 font-[MavenPro-Regular]">
-                {item?.review?.toUpperCase()} - {item?.origin} - {item?.year}
-              </Text>
-            </Card.Header>
-          </Card>
-        )}
+        renderItem={({ item, index }) => {
+          // swipeableRefs.current[index] = createRef();
+          return (
+            <Swipeable
+              friction={2}
+              ref={(_ref) => {
+                if (!swipeableRefs.current[index])
+                  swipeableRefs.current[index] = _ref;
+                swipeableRef.current = _ref;
+              }}
+              renderRightActions={renderRightActions}
+              onSwipeableOpen={() => handleSwipeOpen(index)}
+            >
+              <TouchableHighlight
+                elevate
+                size="$1"
+                className="bg-gray-800 px-2 py-1 rounded-md my-0.5"
+                onPress={() => {
+                  console.log("date", new Date());
+                }}
+              >
+                <View className="flex-col items-start gap-1">
+                  <View className="flex-row flex-1 items-start text-white text-sm font-[MavenPro-Regular]">
+                    <Text className="flex-1 color-white leading-5">
+                      {item?.title}
+                    </Text>
+                    <Text className="color-gray-400/80 text-xs">
+                      {item?.filmType} ({item?.subType})
+                    </Text>
+                  </View>
+                  <Text className="text-xs text-gray-400 font-[MavenPro-Regular]">
+                    {item?.review?.toUpperCase()} - {item?.origin} -{" "}
+                    {item?.year}
+                  </Text>
+                </View>
+              </TouchableHighlight>
+            </Swipeable>
+          );
+        }}
       />
     </View>
   );
