@@ -6,23 +6,26 @@ import {
   View,
 } from "react-native";
 import CustomInpurField from "../../components/CustomInpurField";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
-import { getMovies } from "../../lib/firebaseService";
+import { deleteMovie, getMovies } from "../../lib/firebaseService";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataByIndex, setLoading } from "@/redux/slices/dataSlice";
-import { resetFilterForm } from "@/redux/slices/formDataSlice";
+import { resetFilterForm, setMovie } from "@/redux/slices/formDataSlice";
 import CustomDropdown from "../../components/CustomDropdown";
 import CustomButton from "../../components/CustomButton";
 import { Swipeable } from "react-native-gesture-handler";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import { useRouter } from "expo-router";
+import { Alert } from "react-native";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { movies, isLoading } = useSelector((state) => state?.data);
+  const [currentItemIndex, setCurrentItemIndex] = useState(null);
   const swipeableRefs = useRef([]);
-  const swipeableRef = useRef(null);
+  const router = useRouter();
 
   const fetchData = (filter) => {
     dispatch(setLoading(true));
@@ -45,31 +48,78 @@ const Home = () => {
     fetchData({});
   }, []);
 
-  const renderRightActions = () => {
+  const handleSwipeOpen = (index) => {
+    setCurrentItemIndex(index);
+    const openedSwipeableRef = swipeableRefs.current[index];
+    swipeableRefs.current.forEach((_swipeableRef) => {
+      if (_swipeableRef !== openedSwipeableRef) {
+        _swipeableRef.close();
+      }
+    });
+  };
+
+  const handleEdit = (item) => {
+    setCurrentItemIndex((_prev) => {
+      swipeableRefs.current[_prev].close();
+      return null;
+    });
+    dispatch(setMovie(item));
+    router.push("/movieUpdateModal");
+  };
+
+  const handleDelete = (item) => {
+    Alert.alert(
+      "Confirm Deletion",
+      "Are you sure you want to delete this movie?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            setCurrentItemIndex((_prev) => {
+              swipeableRefs.current[_prev].close();
+              return null;
+            });
+            deleteMovie(item?.id)
+              .then(() => {
+                dispatch(
+                  setDataByIndex({
+                    index: "movies",
+                    value: movies.filter((movie) => movie?.id !== item?.id),
+                  })
+                );
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          },
+        },
+      ]
+    );
+  };
+
+  const renderRightActions = (item) => {
     return (
       <View
         className="flex-row items-center justify-center"
         style={{ gap: 8, width: 100 }}
       >
         <CustomButton
+          handlePress={() => handleEdit(item)}
           containerStyle="bg-gray-600 p-[8] rounded-full"
           icon={<Feather name="edit" size={20} color="white" />}
         />
         <CustomButton
+          handlePress={() => handleDelete(item)}
           containerStyle="bg-gray-600 p-[8] rounded-full"
           icon={<AntDesign name="delete" size={20} color="white" />}
         />
       </View>
     );
-  };
-
-  const handleSwipeOpen = (index) => {
-    const openedSwipeableRef = swipeableRefs.current[index];
-    swipeableRefs.current.forEach((swipeableRef) => {
-      if (swipeableRef && swipeableRef !== openedSwipeableRef) {
-        swipeableRef.close();
-      }
-    });
   };
 
   return (
@@ -144,9 +194,8 @@ const Home = () => {
               ref={(_ref) => {
                 if (!swipeableRefs.current[index])
                   swipeableRefs.current[index] = _ref;
-                swipeableRef.current = _ref;
               }}
-              renderRightActions={renderRightActions}
+              renderRightActions={() => renderRightActions(item)}
               onSwipeableOpen={() => handleSwipeOpen(index)}
             >
               <TouchableHighlight

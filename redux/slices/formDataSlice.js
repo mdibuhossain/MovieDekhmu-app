@@ -17,6 +17,7 @@ const initialState = {
     filmType: "",
     subType: "",
   },
+  isEdit: false,
   isLoading: false,
 };
 
@@ -29,6 +30,12 @@ const formSlice = createSlice({
         ? action.payload.value
         : "";
     },
+    setMovie(state, action) {
+      state.movie = action.payload;
+    },
+    setFilter(state, action) {
+      state.filter = action.payload;
+    },
     resetMovieForm(state, action) {
       state.movie = initialState.movie;
     },
@@ -38,9 +45,19 @@ const formSlice = createSlice({
     setLoading(state, action) {
       state.isLoading = action.payload;
     },
+    setIsEdit(state, action) {
+      state.isEdit = action.payload;
+    },
   },
 });
 
-export const { setForm, resetMovieForm, resetFilterForm, setLoading } =
-  formSlice.actions;
+export const {
+  setForm,
+  setMovie,
+  setFilter,
+  resetMovieForm,
+  resetFilterForm,
+  setLoading,
+  setIsEdit,
+} = formSlice.actions;
 export default formSlice.reducer;

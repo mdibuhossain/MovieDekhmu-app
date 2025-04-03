@@ -86,6 +86,7 @@ const App = () => {
         <Stack.Screen name="index" />
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="movieUpdateModal" options={{ presentation: "modal" }} />
       </Stack>
     </SafeAreaView>
   );

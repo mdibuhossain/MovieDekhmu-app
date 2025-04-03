@@ -7,16 +7,20 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, resetMovieForm } from "@/redux/slices/formDataSlice";
-import { addMovie } from "../../lib/firebaseService";
+import { addMovie, updateMovie } from "../../lib/firebaseService";
 import { FontAwesome6 } from "@expo/vector-icons";
 import CustomDropdown from "../../components/CustomDropdown";
 import CustomInpurField from "../../components/CustomInpurField";
 import CustomButton from "../../components/CustomButton";
+import { useRouter } from "expo-router";
+import { setDataByIndex } from "@/redux/slices/dataSlice";
 
-const Create = () => {
+const Create = ({ isUpdate }) => {
   const dispatch = useDispatch();
   const formData = useSelector((state) => state?.formData);
+  const { movies } = useSelector((state) => state?.data);
   const user = useSelector((state) => state?.auth?.user);
+  const router = useRouter();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -27,39 +31,76 @@ const Create = () => {
       }
     }
     dispatch(setLoading(true));
-    addMovie({
-      ...formData?.movie,
-      user: {
-        displayName: user?.displayName,
-        photoURL: user?.photoURL,
-        email: user?.email,
-      },
-    })
-      .then(() => {
-        ToastAndroid.show("Movie added successfully", ToastAndroid.SHORT);
-        dispatch(resetMovieForm());
+    if (isUpdate) {
+      updateMovie(formData?.movie)
+        .then(() => {
+          ToastAndroid.show("Movie updated successfully", ToastAndroid.SHORT);
+          dispatch(
+            setDataByIndex({
+              index: "movies",
+              value: movies.map((movie) =>
+                movie?.id === formData?.movie?.id ? formData?.movie : movie
+              ),
+            })
+          );
+          dispatch(resetMovieForm());
+          router.back();
+        })
+        .catch((e) => {
+          console.log(e);
+        })
+        .finally(() => {
+          dispatch(setLoading(false));
+        });
+    } else {
+      addMovie({
+        ...formData?.movie,
+        user: {
+          displayName: user?.displayName,
+          photoURL: user?.photoURL,
+          email: user?.email,
+        },
       })
-      .catch((e) => {
-        console.log(e);
-      })
-      .finally(() => {
-        dispatch(setLoading(false));
-      });
+        .then(() => {
+          ToastAndroid.show("Movie added successfully", ToastAndroid.SHORT);
+          dispatch(resetMovieForm());
+        })
+        .catch((e) => {
+          console.log(e);
+        })
+        .finally(() => {
+          dispatch(setLoading(false));
+        });
+    }
   };
 
   return (
     <View className="bg-primary flex-1 items-center px-2">
       <View className="flex-row w-full justify-end items-center mt-2">
-        <Text className="flex-1 text-white font-[MavenPro-SemiBold] text-xl">
-          Create
-        </Text>
-        <CustomButton
-          containerStyle="bg-gray-700 border p-2 !h-9 !w-9 justify-center items-center"
-          handlePress={() => dispatch(resetMovieForm())}
-          icon={
-            <FontAwesome6 name="arrow-rotate-right" size={14} color="white" />
-          }
-        />
+        <View
+          className="flex-1 flex-row items-center justify-between"
+          style={{ gap: isUpdate ? 8 : 0 }}
+        >
+          {isUpdate && (
+            <CustomButton
+              containerStyle="bg-gray-700 border p-2 !h-9 !w-9 justify-center items-center"
+              handlePress={() => router.back()}
+              icon={<FontAwesome6 name="arrow-left" size={14} color="white" />}
+            />
+          )}
+          <Text className="flex-1 text-white font-[MavenPro-SemiBold] text-xl">
+            {isUpdate ? "Update" : "Create"}
+          </Text>
+        </View>
+        {!isUpdate && (
+          <CustomButton
+            containerStyle="bg-gray-700 border p-2 !h-9 !w-9 justify-center items-center"
+            handlePress={() => dispatch(resetMovieForm())}
+            icon={
+              <FontAwesome6 name="arrow-rotate-right" size={14} color="white" />
+            }
+          />
+        )}
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
@@ -180,7 +221,15 @@ const Create = () => {
             icon={
               formData?.isLoading ? <ActivityIndicator color="#161622" /> : null
             }
-            title="Submit"
+            title={
+              isUpdate
+                ? formData?.isLoading
+                  ? "Updating..."
+                  : "Update"
+                : formData?.isLoading
+                ? "Creating..."
+                : "Create"
+            }
             handlePress={submitHandler}
             isLoading={formData?.isLoading}
             textStyle="text-primary"
