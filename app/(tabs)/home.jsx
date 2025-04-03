@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import CustomInpurField from "../../components/CustomInpurField";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { deleteMovie, getMovies } from "../../lib/firebaseService";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,11 +22,13 @@ import { Alert } from "react-native";
 import LottieView from "lottie-react-native";
 import listLoader from "@/assets/list-loader.json";
 import { Dimensions } from "react-native";
+import { useDebounce } from "use-debounce";
 
 const Home = () => {
   const dispatch = useDispatch();
   const formData = useSelector((state) => state?.formData);
   const { movies, isLoading } = useSelector((state) => state?.data);
+  const [debounceFilter] = useDebounce(formData?.filter, 500);
   const [currentItemIndex, setCurrentItemIndex] = useState(null);
   const swipeableRefs = useRef([]);
   const router = useRouter();
@@ -50,11 +52,10 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchData(formData?.filter);
-  }, [formData?.filter]);
+    fetchData(debounceFilter);
+  }, [debounceFilter]);
 
   const handleSwipeOpen = (index) => {
-    console.log("index", index);
     setCurrentItemIndex(index);
     const openedSwipeableRef = swipeableRefs.current[index];
     swipeableRefs.current.forEach((_swipeableRef) => {
@@ -130,8 +131,8 @@ const Home = () => {
     );
   };
 
-  const renderRightActions = (item) => {
-    return (
+  const renderRightActions = useCallback(
+    (item) => (
       <View
         className="flex-row items-center justify-center"
         style={{ gap: 8, width: 100 }}
@@ -147,8 +148,9 @@ const Home = () => {
           icon={<AntDesign name="delete" size={20} color="white" />}
         />
       </View>
-    );
-  };
+    ),
+    [handleEdit, handleDelete]
+  );
 
   return (
     <View className="bg-primary flex-1">
