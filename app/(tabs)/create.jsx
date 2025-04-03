@@ -1,19 +1,17 @@
-import { ToastAndroid, View } from "react-native";
 import {
-  Button,
-  Form,
-  Label,
+  ActivityIndicator,
   ScrollView,
-  Spinner,
   Text,
-  YStack,
-} from "tamagui";
+  ToastAndroid,
+  View,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, resetMovieForm } from "@/redux/slices/formDataSlice";
 import { addMovie } from "../../lib/firebaseService";
 import { FontAwesome6 } from "@expo/vector-icons";
 import CustomDropdown from "../../components/CustomDropdown";
 import CustomInpurField from "../../components/CustomInpurField";
+import CustomButton from "../../components/CustomButton";
 
 const Create = () => {
   const dispatch = useDispatch();
@@ -55,26 +53,27 @@ const Create = () => {
         <Text className="flex-1 text-white font-[MavenPro-SemiBold] text-xl">
           Create
         </Text>
-        <Button
-          className="bg-gray-700 border p-2 !h-9 !w-9 justify-center items-center"
-          onPress={() => dispatch(resetMovieForm())}
-        >
-          <FontAwesome6 name="arrow-rotate-right" size={14} color="white" />
-        </Button>
+        <CustomButton
+          containerStyle="bg-gray-700 border p-2 !h-9 !w-9 justify-center items-center"
+          handlePress={() => dispatch(resetMovieForm())}
+          icon={
+            <FontAwesome6 name="arrow-rotate-right" size={14} color="white" />
+          }
+        />
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Form onSubmit={submitHandler}>
-          <YStack>
-            <Label color="white">Movie title</Label>
+        <View>
+          <View>
+            <Text className="color-gray-400 my-2">Movie title</Text>
             <CustomInpurField
               index="movie"
               name="title"
               inputFieldStyle="rounded-lg"
             />
-          </YStack>
+          </View>
           <View className="flex-row w-full">
-            <YStack className="mr-2">
-              <Label color="white">Year</Label>
+            <View className="mr-2">
+              <Text className="color-gray-400 my-2">Year</Text>
               <CustomDropdown
                 placeholder="Review"
                 index="movie"
@@ -91,9 +90,9 @@ const Create = () => {
                   fontSize: 13,
                 }}
               />
-            </YStack>
-            <YStack className="flex-1">
-              <Label color="white">Origin</Label>
+            </View>
+            <View className="flex-1">
+              <Text className="color-gray-400 my-2">Origin</Text>
               <CustomDropdown
                 search={true}
                 index="movie"
@@ -112,11 +111,11 @@ const Create = () => {
                   fontSize: 13,
                 }}
               />
-            </YStack>
+            </View>
           </View>
           <View className="flex-row w-full">
-            <YStack className="flex-1 mr-2">
-              <Label color="white">Film type</Label>
+            <View className="flex-1 mr-2">
+              <Text className="color-gray-400 my-2">Film type</Text>
               <CustomDropdown
                 index="movie"
                 name="filmType"
@@ -134,9 +133,9 @@ const Create = () => {
                   fontSize: 13,
                 }}
               />
-            </YStack>
-            <YStack>
-              <Label color="white">Type</Label>
+            </View>
+            <View>
+              <Text className="color-gray-400 my-2">Type</Text>
               <CustomDropdown
                 index="movie"
                 name="subType"
@@ -153,11 +152,11 @@ const Create = () => {
                   fontSize: 13,
                 }}
               />
-            </YStack>
+            </View>
           </View>
 
-          <YStack>
-            <Label color="white">Review</Label>
+          <View>
+            <Text className="color-gray-400 my-2">Review</Text>
             <CustomDropdown
               placeholder="Review"
               index="movie"
@@ -175,20 +174,19 @@ const Create = () => {
                 fontSize: 13,
               }}
             />
-          </YStack>
+          </View>
 
-          <Form.Trigger asChild disabled={formData?.isLoading} className="my-5">
-            <Button
-              icon={formData?.isLoading ? () => <Spinner /> : null}
-              className={`bg-gray-800 text-white ${
-                formData?.isLoading ? "opacity-50" : ""
-              }`}
-              disabled={formData?.isLoading}
-            >
-              Submit
-            </Button>
-          </Form.Trigger>
-        </Form>
+          <CustomButton
+            icon={
+              formData?.isLoading ? <ActivityIndicator color="#161622" /> : null
+            }
+            title="Submit"
+            handlePress={submitHandler}
+            isLoading={formData?.isLoading}
+            textStyle="text-primary"
+            containerStyle={`mt-4 h-10 justify-center items-center rounded-lg`}
+          />
+        </View>
       </ScrollView>
     </View>
   );

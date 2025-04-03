@@ -76,9 +76,11 @@ const Home = () => {
     <View className="bg-primary flex-1">
       <View className=" px-3">
         <CustomInpurField
-          placeholder="Search"
           inputFieldStyle="!rounded-full"
           containerStyle="mt-2"
+          placeholder="Search"
+          index="filter"
+          name="title"
         />
         <View className="flex-row justify-between items-center mt-2">
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>

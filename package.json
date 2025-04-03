@@ -20,9 +20,6 @@
     "@react-navigation/native": "^6.0.2",
     "@reduxjs/toolkit": "^2.6.1",
     "@shopify/flash-list": "1.7.3",
-    "@tamagui/config": "^1.105.0",
-    "@tamagui/linear-gradient": "^1.105.0",
-    "@tamagui/lucide-icons": "^1.105.0",
     "expo": "~52.0.41",
     "expo-blur": "~14.0.3",
     "expo-constants": "~17.0.8",
@@ -52,8 +49,7 @@
     "react-native-svg-transformer": "^1.4.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "react-redux": "^9.2.0",
-    "tamagui": "^1.105.0"
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

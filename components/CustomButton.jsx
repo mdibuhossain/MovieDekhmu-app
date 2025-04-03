@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 
 const CustomButton = ({
@@ -10,6 +10,7 @@ const CustomButton = ({
   isDisabled,
   handlePress,
   containerStyle,
+  children,
 }) => {
   return (
     <TouchableOpacity
@@ -22,11 +23,14 @@ const CustomButton = ({
       disabled={isLoading || isDisabled}
     >
       {icon && title ? (
-        <Text
-          className={`text-primary font-mPbold text-lg text-center ${textStyle}`}
-        >
-          {icon} {title}
-        </Text>
+        <View className="flex-row items-center justify-center gap-2">
+          {icon}
+          <Text
+            className={`text-primary font-mPbold text-lg text-center ${textStyle}`}
+          >
+            {title}
+          </Text>
+        </View>
       ) : icon ? (
         icon
       ) : title ? (
@@ -36,6 +40,7 @@ const CustomButton = ({
           {title}
         </Text>
       ) : null}
+      {children}
     </TouchableOpacity>
   );
 };

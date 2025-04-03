@@ -2,9 +2,7 @@ import React, { useEffect } from "react";
 import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TamaguiProvider } from "tamagui";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import { tamaguiConfig } from "../tamagui.config";
 import { useColorScheme } from "react-native";
 import Store from "@/redux/store";
 import {
@@ -22,8 +20,6 @@ SplashScreen.preventAutoHideAsync();
 const RootLayout = () => {
   const colorScheme = useColorScheme();
   const [fontLoaded, error] = useFonts({
-    Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
-    InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
     "MavenPro-Bold": require("../assets/fonts/MavenPro-Bold.ttf"),
     "MavenPro-Black": require("../assets/fonts/MavenPro-Black.ttf"),
     "MavenPro-Medium": require("../assets/fonts/MavenPro-Medium.ttf"),
@@ -45,17 +41,15 @@ const RootLayout = () => {
   if (!fontLoaded) return null;
 
   return (
-    <TamaguiProvider config={tamaguiConfig} defaultTheme={colorScheme}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Provider store={Store}>
-          {/* <GlobalProvider> */}
-          <GestureHandlerRootView className="flex-1">
-            <App />
-          </GestureHandlerRootView>
-          {/* </GlobalProvider> */}
-        </Provider>
-      </ThemeProvider>
-    </TamaguiProvider>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <Provider store={Store}>
+        {/* <GlobalProvider> */}
+        <GestureHandlerRootView className="flex-1">
+          <App />
+        </GestureHandlerRootView>
+        {/* </GlobalProvider> */}
+      </Provider>
+    </ThemeProvider>
   );
 };
 

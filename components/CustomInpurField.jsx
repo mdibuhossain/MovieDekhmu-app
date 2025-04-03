@@ -1,6 +1,5 @@
-import { View, Text } from "react-native";
+import { View, Text, TextInput } from "react-native";
 import { useState } from "react";
-import { Input } from "tamagui";
 import { useDispatch, useSelector } from "react-redux";
 import { setForm } from "@/redux/slices/formDataSlice";
 
@@ -37,7 +36,7 @@ const CustomInpurField = (props) => {
       {label && <Text className={`text-gray-400 ${labelStyle}`}>{label}</Text>}
       <View className={`w-full flex-row ${specialStyle}`}>
         <View className={`w-full h-11 ${inputFieldContainerStyle}`}>
-          <Input
+          <TextInput
             type={type}
             placeholder={placeholder}
             value={
@@ -52,7 +51,8 @@ const CustomInpurField = (props) => {
                 : handleChangeText || setInputValue
             }
             keyboardType={type === "email" ? "email-address" : "default"}
-            className={`flex-1 text-base text-gray-300 border-gray-400/80 bg-transparent rounded-none ${inputFieldStyle}`}
+            className={`flex-1 text-base text-gray-300 px-3 border border-gray-400/80 bg-transparent rounded-none ${inputFieldStyle}`}
+            placeholderTextColor="#7d7d7d"
           />
         </View>
         {GroupedButton && <GroupedButton cbFn={cbProcessInputValue} />}
