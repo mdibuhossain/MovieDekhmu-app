@@ -7,7 +7,11 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, resetMovieForm } from "@/redux/slices/formDataSlice";
-import { addMovie, updateMovie } from "../../lib/firebaseService";
+import {
+  addManyMovies,
+  addMovie,
+  updateMovie,
+} from "../../lib/firebaseService";
 import { FontAwesome6 } from "@expo/vector-icons";
 import CustomDropdown from "../../components/CustomDropdown";
 import CustomInpurField from "../../components/CustomInpurField";
@@ -77,6 +81,25 @@ const Create = ({ isUpdate }) => {
   const handleBack = () => {
     router.back();
     dispatch(resetMovieForm());
+  };
+
+  const handleMultipleMovies = () => {
+    dispatch(setLoading(true));
+    addManyMovies({
+      displayName: user?.displayName,
+      photoURL: user?.photoURL,
+      email: user?.email,
+    })
+      .then(() => {
+        ToastAndroid.show("Movies added successfully", ToastAndroid.SHORT);
+        dispatch(resetMovieForm());
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
   };
 
   return (
@@ -181,7 +204,7 @@ const Create = ({ isUpdate }) => {
               />
             </View>
             <View>
-              <Text className="color-gray-400 my-2">Type</Text>
+              <Text className="color-gray-400 my-2">Sub type</Text>
               <CustomDropdown
                 index="movie"
                 name="subType"
@@ -240,6 +263,24 @@ const Create = ({ isUpdate }) => {
             textStyle="text-primary"
             containerStyle={`mt-4 h-10 justify-center items-center rounded-lg`}
           />
+          {/* <CustomButton
+            icon={
+              formData?.isLoading ? <ActivityIndicator color="#161622" /> : null
+            }
+            title={
+              isUpdate
+                ? formData?.isLoading
+                  ? "Updating..."
+                  : "Update"
+                : formData?.isLoading
+                ? "Creating..."
+                : "Create"
+            }
+            handlePress={handleMultipleMovies}
+            isLoading={formData?.isLoading}
+            textStyle="text-primary"
+            containerStyle={`mt-4 h-10 justify-center items-center rounded-lg`}
+          /> */}
         </View>
       </ScrollView>
     </View>

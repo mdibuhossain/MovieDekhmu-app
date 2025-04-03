@@ -25,33 +25,36 @@ import { Dimensions } from "react-native";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const formData = useSelector((state) => state?.formData);
   const { movies, isLoading } = useSelector((state) => state?.data);
   const [currentItemIndex, setCurrentItemIndex] = useState(null);
   const swipeableRefs = useRef([]);
   const router = useRouter();
 
   const fetchData = (filter) => {
-    dispatch(setLoading(true));
     try {
+      dispatch(setLoading(true));
       getMovies(filter)
         .then((res) => {
           dispatch(setDataByIndex({ index: "movies", value: res }));
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          dispatch(setLoading(false));
         });
     } catch (error) {
       console.log(error);
-    } finally {
-      dispatch(setLoading(false));
     }
   };
 
   useEffect(() => {
-    fetchData({});
-  }, []);
+    fetchData(formData?.filter);
+  }, [formData?.filter]);
 
   const handleSwipeOpen = (index) => {
+    console.log("index", index);
     setCurrentItemIndex(index);
     const openedSwipeableRef = swipeableRefs.current[index];
     swipeableRefs.current.forEach((_swipeableRef) => {
@@ -102,6 +105,28 @@ const Home = () => {
           },
         },
       ]
+    );
+  };
+
+  const spinner = () => {
+    return (
+      <View className="flex-1 flex-col">
+        {movies.length === 0 && !isLoading && (
+          <Text className="text-white text-center text-lg font-[MavenPro-Regular] mt-2">
+            No movies found. Please add a movie.
+          </Text>
+        )}
+        {isLoading && movies.length === 0 && (
+          <LottieView
+            source={listLoader}
+            autoPlay
+            loop
+            style={{
+              height: Dimensions.get("window").height * 0.25,
+            }}
+          />
+        )}
+      </View>
     );
   };
 
@@ -189,7 +214,7 @@ const Home = () => {
             colors={["#FF9C01"]}
           />
         }
-        ListHeaderComponent={isLoading ? spinner : null}
+        ListHeaderComponent={spinner}
         renderItem={({ item, index }) => {
           return (
             <Swipeable
@@ -219,30 +244,13 @@ const Home = () => {
                     </Text>
                   </View>
                   <Text className="text-xs text-gray-400 font-[MavenPro-Regular]">
-                    {item?.review?.toUpperCase()} - {item?.origin} -{" "}
-                    {item?.year}
+                    {item?.review} - {item?.origin} - {item?.year}
                   </Text>
                 </View>
               </TouchableHighlight>
             </Swipeable>
           );
         }}
-      />
-    </View>
-  );
-};
-
-const spinner = () => {
-  return (
-    <View className="w-full h-full flex-1 flex-col">
-      <LottieView
-        source={listLoader}
-        autoPlay
-        loop
-        style={{
-          height: Dimensions.get("window").height * 0.3,
-        }}
-        resizeMode="contain"
       />
     </View>
   );
