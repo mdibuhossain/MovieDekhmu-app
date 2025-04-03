@@ -33,7 +33,9 @@ const CustomInpurField = (props) => {
 
   return (
     <View className={`w-full ${containerStyle}`}>
-      {label && <Text className={`text-gray-400 ${labelStyle}`}>{label}</Text>}
+      {label && (
+        <Text className={`text-gray-400 mb-2 ${labelStyle}`}>{label}</Text>
+      )}
       <View className={`w-full flex-row ${specialStyle}`}>
         <View className={`w-full h-11 ${inputFieldContainerStyle}`}>
           <TextInput

@@ -74,6 +74,11 @@ const Create = ({ isUpdate }) => {
     }
   };
 
+  const handleBack = () => {
+    router.back();
+    dispatch(resetMovieForm());
+  };
+
   return (
     <View className="bg-primary flex-1 items-center px-2">
       <View className="flex-row w-full justify-end items-center mt-2">
@@ -84,7 +89,7 @@ const Create = ({ isUpdate }) => {
           {isUpdate && (
             <CustomButton
               containerStyle="bg-gray-700 border p-2 !h-9 !w-9 justify-center items-center"
-              handlePress={() => router.back()}
+              handlePress={handleBack}
               icon={<FontAwesome6 name="arrow-left" size={14} color="white" />}
             />
           )}
@@ -116,7 +121,7 @@ const Create = ({ isUpdate }) => {
             <View className="mr-2">
               <Text className="color-gray-400 my-2">Year</Text>
               <CustomDropdown
-                placeholder="Review"
+                placeholder="Year"
                 index="movie"
                 name="year"
                 style={{

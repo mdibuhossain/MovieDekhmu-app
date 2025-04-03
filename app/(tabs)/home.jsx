@@ -19,6 +19,9 @@ import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
 import { Alert } from "react-native";
+import LottieView from "lottie-react-native";
+import listLoader from "@/assets/list-loader.json";
+import { Dimensions } from "react-native";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -186,8 +189,8 @@ const Home = () => {
             colors={["#FF9C01"]}
           />
         }
+        ListHeaderComponent={isLoading ? spinner : null}
         renderItem={({ item, index }) => {
-          // swipeableRefs.current[index] = createRef();
           return (
             <Swipeable
               friction={2}
@@ -224,6 +227,22 @@ const Home = () => {
             </Swipeable>
           );
         }}
+      />
+    </View>
+  );
+};
+
+const spinner = () => {
+  return (
+    <View className="w-full h-full flex-1 flex-col">
+      <LottieView
+        source={listLoader}
+        autoPlay
+        loop
+        style={{
+          height: Dimensions.get("window").height * 0.3,
+        }}
+        resizeMode="contain"
       />
     </View>
   );
