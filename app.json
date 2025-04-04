@@ -25,14 +25,15 @@
       "windowSoftInputMode": "adjustPan",
       "jsEngine": "hermes",
       "package": "com.mdibuhossain.filmlist",
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ]
+      "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/favicon.png"
+    },
+    "cli": {
+      "appVersionSource": "remote"
     },
     "plugins": [
       "expo-router",
