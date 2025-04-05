@@ -1,4 +1,4 @@
-import { View, Text, Button, Image } from "react-native";
+import { View, Text, Image } from "react-native";
 import React from "react";
 import ScreenLayout from "../../components/ScreenLayout";
 import CustomInpurField from "../../components/CustomInpurField";

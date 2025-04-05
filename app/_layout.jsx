@@ -14,6 +14,7 @@ import { auth } from "@/lib/firebaseService";
 import { onAuthStateChanged } from "firebase/auth";
 import { setLoggedIn, setLoading, setUser } from "@/redux/slices/authSlice";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -45,7 +46,9 @@ const RootLayout = () => {
       <Provider store={Store}>
         {/* <GlobalProvider> */}
         <GestureHandlerRootView className="flex-1">
-          <App />
+          <BottomSheetModalProvider>
+            <App />
+          </BottomSheetModalProvider>
         </GestureHandlerRootView>
         {/* </GlobalProvider> */}
       </Provider>
@@ -86,7 +89,10 @@ const App = () => {
         <Stack.Screen name="index" />
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="movieUpdateModal" options={{ presentation: "modal" }} />
+        <Stack.Screen
+          name="movieUpdateModal"
+          options={{ presentation: "modal" }}
+        />
       </Stack>
     </SafeAreaView>
   );

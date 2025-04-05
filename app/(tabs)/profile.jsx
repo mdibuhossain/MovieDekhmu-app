@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import {
   auth,
@@ -35,7 +35,6 @@ const Profile = () => {
   const [isLoadingForPhoto, setIsLoadingForPhoto] = useState(false);
   const [isLoadingForName, setIsLoadingForName] = useState(false);
   const [isLoadingForEmailVerify, setIsLoadingForEmailVerify] = useState(false);
-  const [isLoadingLocal, setIsLoadingLocal] = useState(false);
 
   const handleUpdateFullName = async (newName) => {
     setIsLoadingForName(true);
@@ -150,12 +149,12 @@ const Profile = () => {
     //   icon: svgs.payment,
     //   onPress: () => {},
     // },
-    // {
-    //   isButton: false,
-    //   title: "My Wishlist",
-    //   icon: svgs.wishlist,
-    //   onPress: () => {},
-    // },
+    {
+      isButton: false,
+      title: "My Wishlist",
+      icon: svgs.wishlist,
+      onPress: () => {},
+    },
     // {
     //   isButton: false,
     //   title: "My Reviews",
@@ -266,7 +265,8 @@ const Profile = () => {
           <CustomInpurField
             label="Full Name"
             containerStyle="mt-5"
-            inputFieldContainerStyle="flex-1 focus:!border-secondary"
+            inputFieldContainerStyle="flex-1"
+            inputFieldStyle="focus:!border-secondary"
             GroupedButton={({ cbFn }) => (
               <CustomButton
                 title="Update"
@@ -288,11 +288,6 @@ const Profile = () => {
   return (
     // <ScreenLayout>
     <View className="bg-primary flex-1 items-center">
-      {/* <View className="absolute top-0 right-0">
-          <TouchableOpacity onPress={signOut}>
-            <FeatherIcons name="log-out" size={25} color="#FF9C01" />
-          </TouchableOpacity>
-        </View> */}
       <View className="w-full flex-1">
         <FlashList
           data={items}
@@ -320,4 +315,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default memo(Profile);

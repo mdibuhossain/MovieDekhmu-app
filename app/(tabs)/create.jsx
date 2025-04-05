@@ -18,6 +18,7 @@ import CustomInpurField from "../../components/CustomInpurField";
 import CustomButton from "../../components/CustomButton";
 import { useRouter } from "expo-router";
 import { setDataByIndex } from "@/redux/slices/dataSlice";
+import { memo } from "react";
 
 const Create = ({ isUpdate }) => {
   const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const Create = ({ isUpdate }) => {
     }
     dispatch(setLoading(true));
     if (isUpdate) {
-      updateMovie(formData?.movie)
+      updateMovie(formData?.movie, user?.email)
         .then(() => {
           ToastAndroid.show("Movie updated successfully", ToastAndroid.SHORT);
           dispatch(
@@ -57,14 +58,7 @@ const Create = ({ isUpdate }) => {
           dispatch(setLoading(false));
         });
     } else {
-      addMovie({
-        ...formData?.movie,
-        user: {
-          displayName: user?.displayName,
-          photoURL: user?.photoURL,
-          email: user?.email,
-        },
-      })
+      addMovie(formData?.movie, user?.email)
         .then(() => {
           ToastAndroid.show("Movie added successfully", ToastAndroid.SHORT);
           dispatch(resetMovieForm());
@@ -85,11 +79,7 @@ const Create = ({ isUpdate }) => {
 
   const handleMultipleMovies = () => {
     dispatch(setLoading(true));
-    addManyMovies({
-      displayName: user?.displayName,
-      photoURL: user?.photoURL,
-      email: user?.email,
-    })
+    addManyMovies(user?.email)
       .then(() => {
         ToastAndroid.show("Movies added successfully", ToastAndroid.SHORT);
         dispatch(resetMovieForm());
@@ -137,7 +127,7 @@ const Create = ({ isUpdate }) => {
             <CustomInpurField
               index="movie"
               name="title"
-              inputFieldStyle="rounded-lg"
+              inputFieldStyle="rounded-lg focus:!border-secondary"
             />
           </View>
           <View className="flex-row w-full">
@@ -273,8 +263,8 @@ const Create = ({ isUpdate }) => {
                   ? "Updating..."
                   : "Update"
                 : formData?.isLoading
-                ? "Creating..."
-                : "Create"
+                ? "Uploading..."
+                : "Upload multiple movies"
             }
             handlePress={handleMultipleMovies}
             isLoading={formData?.isLoading}
@@ -287,4 +277,4 @@ const Create = ({ isUpdate }) => {
   );
 };
 
-export default Create;
+export default memo(Create);
