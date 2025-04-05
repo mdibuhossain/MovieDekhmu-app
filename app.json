@@ -13,9 +13,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "experiments": {
-      "typedRoutes": true
-    },
     "ios": {
       "supportsTablet": true
     },
@@ -38,6 +35,10 @@
       "output": "static",
       "favicon": "./assets/favicon.png"
     },
+    "cli": {
+      "requireCommit": true,
+      "appVersionSource": "remote"
+    },
     "plugins": [
       "expo-router",
       [
@@ -48,6 +49,9 @@
       ],
       "expo-font"
     ],
+    "experiments": {
+      "typedRoutes": true
+    },
     "extra": {
       "router": {
         "origin": false
