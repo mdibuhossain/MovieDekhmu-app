@@ -7,7 +7,6 @@
     "icon": "./assets/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -25,7 +24,6 @@
         "backgroundColor": "#ffffff"
       },
       "softwareKeyboardLayoutMode": "pan",
-      "windowSoftInputMode": "adjustPan",
       "jsEngine": "hermes",
       "package": "com.mdibuhossain.filmlist",
       "permissions": ["android.permission.RECORD_AUDIO"]
@@ -35,11 +33,6 @@
       "output": "static",
       "favicon": "./assets/favicon.png"
     },
-    "cli": {
-      "requireCommit": true,
-      "appVersionSource": "remote"
-    },
-    "sdkVersion": "46.0.0",
     "plugins": [
       "expo-router",
       [
@@ -50,9 +43,7 @@
       ],
       "expo-font"
     ],
-    "experiments": {
-      "typedRoutes": true
-    },
+    "experiments": {},
     "extra": {
       "router": {
         "origin": false
