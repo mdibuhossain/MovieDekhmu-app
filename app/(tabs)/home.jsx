@@ -174,18 +174,17 @@ const Home = () => {
               </View>
             </ScrollView>
           </View>
-          <View className="h-[1.5] mb-2 w-full bg-gray-600" />
+          {/* <View className="h-[1.5] mb-2 w-full bg-gray-600" /> */}
         </View>
 
         <FlashList
           data={movies}
           contentContainerStyle={{
-            paddingTop: 5,
             paddingRight: 10,
             paddingBottom: 10,
             paddingLeft: 10,
           }}
-          estimatedItemSize={15}
+          estimatedItemSize={25}
           keyExtractor={(_, index) => index.toString()}
           refreshControl={
             <RefreshControl
