@@ -1,10 +1,12 @@
-import { Image, ScrollView, Text, View } from "react-native";
+import { Dimensions, Image, ScrollView, Text, View } from "react-native";
 import { Redirect, router } from "expo-router";
 import { images } from "../constants";
 import CustomButton from "../components/CustomButton";
 import { StatusBar } from "expo-status-bar";
 import ScreenLayout from "../components/ScreenLayout";
 import { useSelector } from "react-redux";
+import LottieView from "lottie-react-native";
+import openLoader from "@/assets/opening-loader.json";
 
 const index = () => {
   const authData = useSelector((state) => state.auth);
@@ -12,7 +14,14 @@ const index = () => {
   if (authData?.isLoading) {
     return (
       <>
-        <Text>Loading...</Text>
+        <LottieView
+          source={openLoader}
+          autoPlay
+          loop
+          style={{
+            height: Dimensions.get("window").height * 0.9,
+          }}
+        />
       </>
     );
   }

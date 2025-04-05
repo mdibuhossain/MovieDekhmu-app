@@ -174,7 +174,7 @@ const Home = () => {
               </View>
             </ScrollView>
           </View>
-          <View className="h-[1.5] w-full bg-gray-600" />
+          <View className="h-[1.5] mb-2 w-full bg-gray-600" />
         </View>
 
         <FlashList
