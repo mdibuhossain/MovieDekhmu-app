@@ -7,10 +7,14 @@
     "icon": "./assets/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+    },
+    "experiments": {
+      "typedRoutes": true
     },
     "ios": {
       "supportsTablet": true
@@ -24,6 +28,7 @@
         "backgroundColor": "#ffffff"
       },
       "softwareKeyboardLayoutMode": "pan",
+      "windowSoftInputMode": "adjustPan",
       "jsEngine": "hermes",
       "package": "com.mdibuhossain.filmlist",
       "permissions": ["android.permission.RECORD_AUDIO"]
