@@ -25,7 +25,6 @@
         "backgroundColor": "#ffffff"
       },
       "softwareKeyboardLayoutMode": "pan",
-      "windowSoftInputMode": "adjustPan",
       "jsEngine": "hermes",
       "package": "com.mdibuhossain.filmlist",
       "permissions": ["android.permission.RECORD_AUDIO"]
@@ -34,10 +33,6 @@
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/favicon.png"
-    },
-    "cli": {
-      "requireCommit": true,
-      "appVersionSource": "remote"
     },
     "sdkVersion": "52.0.0",
     "plugins": [
