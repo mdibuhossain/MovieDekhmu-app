@@ -43,7 +43,6 @@
       ],
       "expo-font"
     ],
-    "experiments": {},
     "extra": {
       "router": {
         "origin": false
