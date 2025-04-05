@@ -39,6 +39,7 @@
       "requireCommit": true,
       "appVersionSource": "remote"
     },
+    "sdkVersion": "52.0.0",
     "plugins": [
       "expo-router",
       [
