@@ -202,7 +202,7 @@ const Profile = () => {
             </Text>
           </View>
           {!item.isButton && (
-            <FeatherIcons name="chevron-right" size={20} color="#FF9C01" />
+            <FeatherIcons name="chevron-right" size={20} color="#FF7F50" />
           )}
         </TouchableOpacity>
         <View className="border-t border-gray-700 w-full" />
@@ -230,17 +230,17 @@ const Profile = () => {
                 }
               />
             )}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               activeOpacity={0.7}
               className="absolute right-0 bottom-0 bg-gray-700 rounded-full p-1"
             >
               <MaterialCommunityIcons
                 onPress={handleUpdateProfilePicture}
                 name="image-edit-outline"
-                color="#FF9C01"
+                color="#FF7F50"
                 size={20}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <Text className="text-white text-base font-mPbold mt-2">
             {isLoading || isLoadingForName
@@ -305,7 +305,7 @@ const Profile = () => {
             <RefreshControl
               refreshing={isLoading}
               onRefresh={onRefresh}
-              colors={["#FF9C01"]}
+              colors={["#FF7F50"]}
             />
           }
         />

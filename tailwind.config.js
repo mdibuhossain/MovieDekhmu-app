@@ -6,9 +6,11 @@ module.exports = {
       colors: {
         primary: "#161622",
         secondary: {
-          DEFAULT: "#FF9C01",
+          DEFAULT: "#FF7F50", // Coral - warm and visually appealing
           100: "#FF9001",
           200: "#FF8E01",
+          300: "#FFB347", // Lighter shade
+          400: "#FFD580", // Softer pastel shade
         },
         black: {
           DEFAULT: "#000",
@@ -17,6 +19,12 @@ module.exports = {
         },
         gray: {
           100: "#CDCDE0",
+          200: "#E5E5E5", // Light gray for contrast
+        },
+        accent: {
+          100: "#FF6F61", // Coral for a pop of color
+          200: "#FFD700", // Gold for a luxurious touch
+          300: "#FF4500", // Orange-red for vibrancy
         },
       },
       fontFamily: {

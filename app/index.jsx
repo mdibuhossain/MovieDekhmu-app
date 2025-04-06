@@ -33,29 +33,28 @@ const index = () => {
       <ScreenLayout>
         <View className="justify-center w-full h-full items-center">
           <Image
-            source={images.logo}
-            className="w-[130px] h-[84px]"
-            resizeMode="contain"
-          />
-          <Image
             source={images.cards}
             className="max-w-[380px] w-full h-[300px]"
             resizeMode="contain"
           />
           <View className="relative mt-5">
             <Text className="text-3xl text-white font-bold text-center">
-              Discover endless possibilities with{" "}
-              <Text className="text-secondary-200">Aora</Text>
+              Unlock the magic of cinema with{" "}
+              <Text className="text-secondary-200">MovieDekhmu</Text>
             </Text>
             <Image
               source={images.path}
               resizeMode="contain"
-              className="w-[136px] h-[15px] absolute -bottom-[6px] -right-8"
+              className="w-[136px] h-[15px] absolute -bottom-[5px] -right-0"
             />
           </View>
-          <Text className="text-xs text-gray-100 mt-7 text-center">
-            Where creativity meets innovations: embark on a journey of a
-            limitless exploration with Aora.
+          <Text className="text-base text-gray-100 mt-7 text-center">
+            হুদাই! মুভি ট্র্যাক রাখার জন্য তৈরি করছি।
+            {"\n"}এখনি সাইন ইন করো{" "}
+            <Text className="text-secondary-200 font-semibold">
+              MovieDekhmu
+            </Text>{" "}
+            অ্যাপের সাথে।
           </Text>
           <CustomButton
             handlePress={() => router.push("/sign-in")}

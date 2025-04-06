@@ -8,7 +8,11 @@ import {
 import CustomInpurField from "../../components/CustomInpurField";
 import { memo, useEffect, useRef, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
-import { deleteMovie, getMovies } from "../../lib/firebaseService";
+import {
+  createDuplicateMovie,
+  deleteMovie,
+  getMovies,
+} from "../../lib/firebaseService";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataByIndex, setLoading } from "@/redux/slices/dataSlice";
 import { resetFilterForm, setMovie } from "@/redux/slices/formDataSlice";
@@ -83,7 +87,7 @@ const Home = () => {
           style: "cancel",
         },
         {
-          text: "Delete",
+          text: "Confirm",
           style: "destructive",
           onPress: () => {
             deleteMovie(item?.id, user?.email)
@@ -97,6 +101,42 @@ const Home = () => {
               })
               .catch((error) => {
                 console.log(error);
+              });
+          },
+        },
+      ]
+    );
+    bottomSheetModalRef.current.dismiss();
+  };
+
+  const handleDuplicate = (item) => {
+    Alert.alert(
+      "Confirm Duplication",
+      "Are you sure you want to duplicate this movie?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Confirm",
+          style: "default",
+          onPress: () => {
+            dispatch(setLoading(true));
+            createDuplicateMovie(item, user?.email)
+              .then((res) => {
+                dispatch(
+                  setDataByIndex({
+                    index: "movies",
+                    value: [...movies, res],
+                  })
+                );
+              })
+              .catch((error) => {
+                console.log(error);
+              })
+              .finally(() => {
+                dispatch(setLoading(false));
               });
           },
         },
@@ -134,14 +174,19 @@ const Home = () => {
       <View className="bg-primary flex-1">
         <View className=" px-3">
           <CustomInpurField
-            inputFieldStyle="!rounded-full focus:!border-secondary"
+            inputFieldStyle="!rounded-full border-2 focus:!border-secondary px-5"
+            inputFieldContainerStyle="h-14"
             containerStyle="mt-2"
             placeholder="Search"
             index="filter"
             name="title"
           />
           <View className="flex-row justify-between items-center mt-2">
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyboardDismissMode="on-drag"
+            >
               <View style={{ flexDirection: "row", gap: 6 }} className="mb-2">
                 <CustomDropdown
                   placeholder="Review"
@@ -178,6 +223,7 @@ const Home = () => {
         </View>
 
         <FlashList
+          keyboardDismissMode="on-drag"
           data={movies}
           contentContainerStyle={{
             paddingRight: 10,
@@ -190,7 +236,7 @@ const Home = () => {
             <RefreshControl
               refreshing={isLoading}
               onRefresh={() => fetchData(debounceFilter)}
-              colors={["#FF9C01"]}
+              colors={["#FF7F50"]}
             />
           }
           ListHeaderComponent={spinner}
@@ -198,7 +244,7 @@ const Home = () => {
             return (
               <TouchableHighlight
                 className="bg-gray-800 px-2 py-1 rounded-md my-0.5"
-                delayLongPress={100}
+                delayLongPress={300}
                 onLongPress={() => {
                   setCurrentItemIndex(index);
                   bottomSheetModalRef.current.present();
@@ -233,7 +279,7 @@ const Home = () => {
             <View className="flex-col justify-around">
               <TouchableHighlight
                 onPress={() => handleEdit(movies[currentItemIndex])}
-                underlayColor={"#FF9C01"}
+                underlayColor={"#FF7F50"}
                 className="px-4 py-2"
               >
                 <Text className="text-white text-lg text-center">Edit</Text>
@@ -245,6 +291,16 @@ const Home = () => {
                 className="px-4 py-2"
               >
                 <Text className="text-white text-lg text-center">Delete</Text>
+              </TouchableHighlight>
+              <View className="bg-[#73737a] h-[1]"></View>
+              <TouchableHighlight
+                onPress={() => handleDuplicate(movies[currentItemIndex])}
+                underlayColor={"#73737a"}
+                className="px-4 py-2"
+              >
+                <Text className="text-white text-lg text-center">
+                  Duplicate
+                </Text>
               </TouchableHighlight>
               <View className="bg-[#73737a] h-[1]"></View>
               <TouchableHighlight
