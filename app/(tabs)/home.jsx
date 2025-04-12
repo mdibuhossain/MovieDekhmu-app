@@ -32,6 +32,8 @@ const Home = () => {
   const [debounceFilter] = useDebounce(formData?.filter, 500);
   const [currentItemIndex, setCurrentItemIndex] = useState(null);
   const { movies, isLoading } = useSelector((state) => state?.data);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const fetchData = (filter) => {
     try {
@@ -61,6 +63,32 @@ const Home = () => {
         dispatch(setLoading(false));
       }
     }
+  };
+
+  const fetchMoreData = () => {
+    if (!hasMore || isLoading) return;
+
+    dispatch(setLoading(true));
+    getMovies(debounceFilter, user?.email, page)
+      .then((res) => {
+        if (res.length === 0) {
+          setHasMore(false);
+        } else {
+          dispatch(
+            setDataByIndex({
+              index: "movies",
+              value: [...movies, ...res],
+            })
+          );
+          setPage((prevPage) => prevPage + 1);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        dispatch(setLoading(false));
+      });
   };
 
   useEffect(() => {
@@ -227,16 +255,22 @@ const Home = () => {
             paddingBottom: 10,
             paddingLeft: 10,
           }}
-          estimatedItemSize={25}
+          estimatedItemSize={100}
           keyExtractor={(_, index) => index.toString()}
           refreshControl={
             <RefreshControl
               refreshing={isLoading}
-              onRefresh={() => fetchData(debounceFilter)}
+              onRefresh={() => {
+                setPage(1);
+                setHasMore(true);
+                fetchData(debounceFilter);
+              }}
               colors={["#FF7F50"]}
             />
           }
           ListHeaderComponent={spinner}
+          onEndReached={fetchMoreData}
+          onEndReachedThreshold={0.5}
           renderItem={({ item, index }) => {
             return (
               <TouchableHighlight

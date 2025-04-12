@@ -1,15 +1,17 @@
-import { View, Text, Alert } from "react-native";
+import { View, Text, Alert, ToastAndroid } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useSelector, useDispatch } from "react-redux";
-import { clearMovies, setLoading } from "@/redux/slices/dataSlice";
-import { setUser } from "@/redux/slices/authSlice";
+import {
+  clearMovies,
+  setLoading,
+  setDataByIndex,
+} from "@/redux/slices/dataSlice";
 import {
   deleteAllMovies,
-  backupMoviesToFirebase,
+  backupMoviesToCloud,
   restoreMoviesFromBackup,
-  deleteAccount,
 } from "@/lib/supabaseService";
 
 const settingsModal = () => {
@@ -35,7 +37,6 @@ const settingsModal = () => {
             dispatch(setLoading(false));
           } catch (error) {
             console.error("Error clearing movies: ", error);
-          } finally {
             dispatch(setLoading(false));
           }
         },
@@ -43,11 +44,10 @@ const settingsModal = () => {
     ]);
   };
 
-  const handleBackupToFirebase = async () => {
+  const handleBackupToCloud = async () => {
     dispatch(setLoading(true));
     try {
-      await backupMoviesToFirebase(user?.email);
-      alert("Movies backed up to Firebase successfully!");
+      await backupMoviesToCloud(user?.email);
       dispatch(setLoading(false));
     } catch (error) {
       console.error("Error backing up movies to Firebase: ", error);
@@ -57,14 +57,12 @@ const settingsModal = () => {
   };
 
   const handleRestoreFromBackup = async () => {
-    dispatch(setLoading(false));
+    dispatch(setLoading(true));
     try {
       await restoreMoviesFromBackup(user?.email);
-      alert("Movies restored from backup successfully!");
       dispatch(setLoading(false));
     } catch (error) {
       console.error("Error restoring movies from backup: ", error);
-    } finally {
       dispatch(setLoading(false));
     }
   };
@@ -148,15 +146,15 @@ const settingsModal = () => {
         />
         <CustomButton
           containerStyle="bg-blue-600 p-3 rounded-md"
-          handlePress={handleBackupToFirebase}
+          handlePress={handleBackupToCloud}
           textStyle="text-white text-sm font-mPmedium"
-          title={isLoading ? "Backing up..." : "Backup to Firebase"}
+          title={isLoading ? "Backing up..." : "Backup to Cloud"}
         />
         <CustomButton
           containerStyle="bg-yellow-600 p-3 rounded-md"
           handlePress={handleRestoreFromBackup}
           textStyle="text-white text-sm font-mPmedium"
-          title={isLoading ? "Restoring..." : "Restore from Backup"}
+          title={isLoading ? "Restoring..." : "Restore from Cloud"}
         />
         <CustomButton
           containerStyle="bg-blue-600 p-3 rounded-md"
