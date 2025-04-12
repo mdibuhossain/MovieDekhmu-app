@@ -8,7 +8,7 @@ import {
   deleteAllMovies,
   backupMoviesToFirebase,
   restoreMoviesFromBackup,
-} from "@/lib/firebaseService";
+} from "@/lib/supabaseService";
 
 const settingsModal = () => {
   const router = useRouter();

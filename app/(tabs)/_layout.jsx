@@ -1,6 +1,6 @@
 import { View, Text, Image } from "react-native";
 import React, { useEffect } from "react";
-import { Redirect, router, Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import { icons } from "../../constants";
 import { useSelector } from "react-redux";
 

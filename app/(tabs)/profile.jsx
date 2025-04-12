@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { memo, useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
-import { getCurrentUser, logOut } from "../../lib/firebaseService";
+import { logOut } from "@/lib/supabaseService";
 import { images, svgs } from "../../constants";
 import FeatherIcons from "@expo/vector-icons/Feather";
 // import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -15,12 +15,7 @@ import FeatherIcons from "@expo/vector-icons/Feather";
 import { FlashList } from "@shopify/flash-list";
 import CustomInpurField from "../../components/CustomInpurField";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setUser,
-  setLoading,
-  setTrigger,
-  setLoggedIn,
-} from "@/redux/slices/authSlice";
+import { setUser, setLoading, setTrigger } from "@/redux/slices/authSlice";
 import useAuthState from "@/hooks/useAuthState";
 import { useRouter } from "expo-router";
 

@@ -12,7 +12,7 @@ import {
   createDuplicateMovie,
   deleteMovie,
   getMovies,
-} from "../../lib/firebaseService";
+} from "@/lib/supabaseService";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataByIndex, setLoading } from "@/redux/slices/dataSlice";
 import { resetFilterForm, setMovie } from "@/redux/slices/formDataSlice";

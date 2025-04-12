@@ -1,11 +1,10 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import ScreenLayout from "../../components/ScreenLayout";
 import CustomInpurField from "../../components/CustomInpurField";
 import CustomButton from "../../components/CustomButton";
 import { images } from "../../constants";
-import { Link, router } from "expo-router";
-import { logIn } from "../../lib/firebaseService";
+import { logIn } from "@/lib/supabaseService";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setUser } from "@/redux/slices/authSlice";
 
@@ -81,13 +80,13 @@ const SignIn = () => {
             handlePress={handleSignIn}
           />
         </View>
-        <View className="w-full items-center">
-          <Text className="text-white mt-5 text-center">
+        <View className="w-full flex-row justify-center items-center mt-5">
+          <Text className="text-white text-center font-mPsemibold">
             Don't have an account?{" "}
-            <Link href="/sign-up" className="text-secondary font-mPsemibold">
-              Sign up
-            </Link>
           </Text>
+          <TouchableOpacity onPress={() => router.push("/sign-up")}>
+            <Text className="text-secondary font-mPsemibold">Sign up</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScreenLayout>

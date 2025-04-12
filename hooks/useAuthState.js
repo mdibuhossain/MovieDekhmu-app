@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { isUserSignedIn } from "@/lib/firebaseService";
+import { isUserSignedIn } from "@/lib/supabaseService";
 import { setLoggedIn, setLoading, setUser } from "@/redux/slices/authSlice";
 
 const useAuthState = () => {

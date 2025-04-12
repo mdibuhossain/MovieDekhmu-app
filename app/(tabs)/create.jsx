@@ -11,7 +11,7 @@ import {
   addManyMovies,
   addMovie,
   updateMovie,
-} from "../../lib/firebaseService";
+} from "@/lib/supabaseService";
 import { FontAwesome6 } from "@expo/vector-icons";
 import CustomDropdown from "../../components/CustomDropdown";
 import CustomInpurField from "../../components/CustomInpurField";

@@ -11,7 +11,7 @@ import CustomInpurField from "../../components/CustomInpurField";
 import CustomButton from "../../components/CustomButton";
 import { images } from "../../constants";
 import { router } from "expo-router";
-import { signUp } from "../../lib/firebaseService";
+import { signUp } from "@/lib/supabaseService";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setUser } from "@/redux/slices/authSlice";
 
@@ -127,7 +127,7 @@ const SignUp = () => {
             title="Log in"
             containerStyle="h-10 w-full justify-center items-center mt-5 bg-transparent border border-secondary"
             textStyle="text-secondary"
-            handlePress={() => router.replace("/sign-in")}
+            handlePress={() => router.back()}
           />
         </View>
       </KeyboardAvoidingView>
