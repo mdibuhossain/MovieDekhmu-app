@@ -7,11 +7,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, resetMovieForm } from "@/redux/slices/formDataSlice";
-import {
-  addManyMovies,
-  addMovie,
-  updateMovie,
-} from "@/lib/supabaseService";
+import { addManyMovies, addMovie, updateMovie } from "@/lib/supabaseService";
 import { FontAwesome6 } from "@expo/vector-icons";
 import CustomDropdown from "../../components/CustomDropdown";
 import CustomInpurField from "../../components/CustomInpurField";
@@ -37,14 +33,14 @@ const Create = ({ isUpdate }) => {
     }
     dispatch(setLoading(true));
     if (isUpdate) {
-      updateMovie(formData?.movie, user?.email)
-        .then(() => {
+      updateMovie(formData?.movie, formData?.movie?.id, user?.email)
+        .then((res) => {
           ToastAndroid.show("Movie updated successfully", ToastAndroid.SHORT);
           dispatch(
             setDataByIndex({
               index: "movies",
               value: movies.map((movie) =>
-                movie?.id === formData?.movie?.id ? formData?.movie : movie
+                movie?.id === formData?.movie?.id ? res : movie
               ),
             })
           );
@@ -58,7 +54,7 @@ const Create = ({ isUpdate }) => {
           dispatch(setLoading(false));
         });
     } else {
-      addMovie(formData?.movie, user?.email)
+      addMovie({ ...formData?.movie, user: user?.email })
         .then(() => {
           ToastAndroid.show("Movie added successfully", ToastAndroid.SHORT);
           dispatch(resetMovieForm());

@@ -8,11 +8,7 @@ import {
 import CustomInpurField from "../../components/CustomInpurField";
 import { memo, useEffect, useRef, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
-import {
-  createDuplicateMovie,
-  deleteMovie,
-  getMovies,
-} from "@/lib/supabaseService";
+import { addMovie, deleteMovie, getMovies } from "@/lib/supabaseService";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataByIndex, setLoading } from "@/redux/slices/dataSlice";
 import { resetFilterForm, setMovie } from "@/redux/slices/formDataSlice";
@@ -123,7 +119,8 @@ const Home = () => {
           style: "default",
           onPress: () => {
             dispatch(setLoading(true));
-            createDuplicateMovie(item, user?.email)
+            const { id, ...itemWithoutId } = item;
+            addMovie(itemWithoutId)
               .then((res) => {
                 dispatch(
                   setDataByIndex({

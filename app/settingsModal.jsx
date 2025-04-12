@@ -4,10 +4,12 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useSelector, useDispatch } from "react-redux";
 import { clearMovies, setLoading } from "@/redux/slices/dataSlice";
+import { setUser } from "@/redux/slices/authSlice";
 import {
   deleteAllMovies,
   backupMoviesToFirebase,
   restoreMoviesFromBackup,
+  deleteAccount,
 } from "@/lib/supabaseService";
 
 const settingsModal = () => {
@@ -89,6 +91,32 @@ const settingsModal = () => {
     }
   };
 
+  // const handleDeleteAccount = () => {
+  //   Alert.alert(
+  //     "Confirm",
+  //     "Are you sure you want to delete your account? This action cannot be undone.",
+  //     [
+  //       { text: "Cancel", style: "cancel" },
+  //       {
+  //         text: "Delete",
+  //         style: "destructive",
+  //         onPress: async () => {
+  //           dispatch(setLoading(true));
+  //           try {
+  //             await deleteAccount(user?.uid);
+  //             dispatch(setUser(null));
+  //           } catch (error) {
+  //             console.error("Error deleting account: ", error);
+  //             alert("Failed to delete account. Please try again.");
+  //           } finally {
+  //             dispatch(setLoading(false));
+  //           }
+  //         },
+  //       },
+  //     ]
+  //   );
+  // };
+
   return (
     <View className="bg-primary flex-1 items-center px-4 py-6">
       <View className="flex-row w-full items-center mb-4">
@@ -137,6 +165,18 @@ const settingsModal = () => {
           title={isLoading ? "Downloading..." : "Download Backup"}
         />
       </View>
+
+      {/* <View className="bg-black-100 w-full p-4 rounded-lg mt-4">
+        <Text className="text-white text-base font-mPsemibold mb-2">
+          Account Management
+        </Text>
+        <CustomButton
+          containerStyle="bg-red-700 p-3 rounded-md"
+          handlePress={handleDeleteAccount}
+          textStyle="text-white text-sm font-mPmedium"
+          title={isLoading ? "Deleting..." : "Delete Account"}
+        />
+      </View> */}
     </View>
   );
 };
