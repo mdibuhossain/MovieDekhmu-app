@@ -1,7 +1,8 @@
 import { View, Text, Image } from "react-native";
-import React from "react";
-import { Tabs } from "expo-router";
+import React, { useEffect } from "react";
+import { Redirect, router, Tabs } from "expo-router";
 import { icons } from "../../constants";
+import { useSelector } from "react-redux";
 
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
@@ -25,6 +26,7 @@ const TabIcon = ({ icon, color, name, focused }) => {
 };
 
 const TabsLayout = () => {
+  const { user } = useSelector((state) => state.auth);
   const TabsData = [
     { name: "home", title: "Home", header: false, icon: icons.home, href: "home" },
     { name: "explore", title: "Explore", header: false, icon: icons.compass, href: null },
@@ -32,6 +34,12 @@ const TabsLayout = () => {
     { name: "bookmark", title: "Bookmark", header: false, icon: icons.bookmark, href: null },
     { name: "profile", title: "Profile", header: false, icon: icons.profile, href: "profile" },
   ];
+
+  useEffect(() => {
+    if (!user) {
+      router.replace("/sign-in");
+    }
+  }, [user]);
 
   return (
     <>

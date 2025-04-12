@@ -13,7 +13,7 @@ import { images } from "../../constants";
 import { router } from "expo-router";
 import { signUp } from "../../lib/firebaseService";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "@/redux/slices/authSlice";
+import { setLoading, setUser } from "@/redux/slices/authSlice";
 
 const initialUserInfo = {
   email: "",
@@ -34,14 +34,21 @@ const SignUp = () => {
     }
     dispatch(setLoading(true));
     try {
-      const { loading, data } = await signUp(
+      const { loading, user } = await signUp(
         formPayload.fullName,
         formPayload.email,
         formPayload.password
       );
       dispatch(setLoading(loading));
-      if (data) {
-        // await checkUser();
+      if (user) {
+        const newUser = {
+          uid: user?.id,
+          email: user?.email,
+          ...user?.user_metadata,
+        };
+        if (user?.email) {
+          dispatch(setUser(newUser));
+        }
       }
     } catch (error) {
       dispatch(setLoading(false));

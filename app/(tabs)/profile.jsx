@@ -7,17 +7,11 @@ import {
 } from "react-native";
 import { memo, useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
-import {
-  auth,
-  logOut,
-  updateUserData,
-  uploadProfilePicture,
-  verifyEmail,
-} from "../../lib/firebaseService";
+import { getCurrentUser, logOut } from "../../lib/firebaseService";
 import { images, svgs } from "../../constants";
 import FeatherIcons from "@expo/vector-icons/Feather";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import * as ImagePicker from "expo-image-picker";
+// import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+// import * as ImagePicker from "expo-image-picker";
 import { FlashList } from "@shopify/flash-list";
 import CustomInpurField from "../../components/CustomInpurField";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,9 +21,12 @@ import {
   setTrigger,
   setLoggedIn,
 } from "@/redux/slices/authSlice";
-import { onAuthStateChanged } from "firebase/auth";
+import useAuthState from "@/hooks/useAuthState";
+import { useRouter } from "expo-router";
 
 const Profile = () => {
+  useAuthState();
+  const router = useRouter();
   const dispatch = useDispatch();
   const { user, isLoading, trigger } = useSelector((state) => state.auth);
   const [isLoadingForPhoto, setIsLoadingForPhoto] = useState(false);
@@ -63,35 +60,6 @@ const Profile = () => {
     }
   };
 
-  const handleUpdateProfilePicture = async () => {
-    setIsLoadingForPhoto(true);
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-      selectionLimit: 1,
-    });
-    if (!result.canceled) {
-      uploadProfilePicture({
-        mimeType: result.assets[0].mimeType,
-        uri: result.assets[0].uri,
-      })
-        .then(async (url) => {
-          const response = await updateUserData({
-            photoURL: url,
-          });
-          if (response) {
-            dispatch(setUser({ ...user, photoURL: url }));
-          }
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
-    }
-    setIsLoadingForPhoto(false);
-  };
-
   const signOut = async () => {
     await logOut();
     dispatch(setUser(null));
@@ -107,28 +75,34 @@ const Profile = () => {
     }
   }, [isLoading]);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (_user) => {
-      if (_user) {
-        dispatch(
-          setUser({
-            email: _user.email,
-            displayName: _user.displayName,
-            photoURL: _user.photoURL,
-            uid: _user.uid,
-            emailVerified: _user.emailVerified,
-          })
-        );
-        dispatch(setLoggedIn(true));
-      } else {
-        dispatch(setLoggedIn(false));
-        dispatch(setUser(null));
-      }
-      dispatch(setLoading(false));
-    });
-
-    return () => unsubscribe(); // Cleanup listener on unmount
-  }, [trigger]);
+  // useEffect(() => {
+  //   const unsubscribe = () => {
+  //     getCurrentUser()
+  //       .then((user) => {
+  //         if (user) {
+  //           dispatch(
+  //             setUser({
+  //               email: user?.email,
+  //               displayName: user?.user_metadata?.displayName,
+  //               photoURL: user?.user_metadata?.photoURL,
+  //               uid: user.id,
+  //               email_verified: user?.email_verified,
+  //             })
+  //           );
+  //           dispatch(setLoggedIn(true));
+  //         } else {
+  //           dispatch(setLoggedIn(false));
+  //           dispatch(setUser(null));
+  //         }
+  //         dispatch(setLoading(false));
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching current user:", error);
+  //         dispatch(setLoading(false));
+  //       });
+  //   };
+  //   return unsubscribe();
+  // }, [trigger]);
 
   const items = [
     // {
@@ -177,7 +151,7 @@ const Profile = () => {
       isButton: false,
       title: "My Settings",
       icon: svgs.settings,
-      onPress: () => {},
+      onPress: () => router.push("/settingsModal"),
     },
     {
       isButton: true,
@@ -250,9 +224,9 @@ const Profile = () => {
           <Text className="text-white text-xs font-mPregular">
             {isLoading
               ? "Loading..."
-              : `${user?.email}${user?.emailVerified ? " ✅" : " ❌"}`}
+              : `${user?.email}${user?.email_verified ? " ✅" : " ❌"}`}
           </Text>
-          {!user?.emailVerified && (
+          {!user?.email_verified && (
             <CustomButton
               title={isLoadingForEmailVerify ? "Loading..." : "Verify Email"}
               containerStyle="px-4 py-1 rounded-full mt-3 active:bg-red-600"

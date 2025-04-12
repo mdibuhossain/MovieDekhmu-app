@@ -7,7 +7,7 @@ import { images } from "../../constants";
 import { Link, router } from "expo-router";
 import { logIn } from "../../lib/firebaseService";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "@/redux/slices/authSlice";
+import { setLoading, setUser } from "@/redux/slices/authSlice";
 
 const initialUserInfo = {
   email: "",
@@ -27,8 +27,13 @@ const SignIn = () => {
     try {
       dispatch(setLoading(true));
       const user = await logIn(formPayload.email, formPayload.password);
+      const newUser = {
+        uid: user?.id,
+        email: user?.email,
+        ...user?.user_metadata,
+      };
       if (user?.email) {
-        router.replace("/home");
+        dispatch(setUser(newUser));
       }
     } catch (error) {
       alert(error.message);

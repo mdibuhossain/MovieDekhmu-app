@@ -3,9 +3,9 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 const AuthLayout = () => {
-  const authData = useSelector((state) => state.auth);
-
-  if (authData?.user?.email) return <Redirect href="/home" />;
+  const { user } = useSelector((state) => state.auth);
+  
+  if (user?.email) return <Redirect href="/home" />;
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

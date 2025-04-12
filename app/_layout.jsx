@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { SplashScreen, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { useColorScheme } from "react-native";
 import Store from "@/redux/store";
 import {
@@ -10,11 +10,9 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { auth } from "@/lib/firebaseService";
-import { onAuthStateChanged } from "firebase/auth";
-import { setLoggedIn, setLoading, setUser } from "@/redux/slices/authSlice";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import useAuthState from "@/hooks/useAuthState";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -57,31 +55,7 @@ const RootLayout = () => {
 };
 
 const App = () => {
-  const dispatch = useDispatch();
-  const authData = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        dispatch(
-          setUser({
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            uid: user.uid,
-            emailVerified: user.emailVerified,
-          })
-        );
-        dispatch(setLoggedIn(true));
-      } else {
-        dispatch(setLoggedIn(false));
-        dispatch(setUser(null));
-      }
-      dispatch(setLoading(false));
-    });
-
-    return () => unsubscribe(); // Cleanup listener on unmount
-  }, [dispatch]);
+  useAuthState();
 
   return (
     <SafeAreaView className="h-full bg-primary">
@@ -91,6 +65,10 @@ const App = () => {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen
           name="movieUpdateModal"
+          options={{ presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="settingsModal"
           options={{ presentation: "modal" }}
         />
       </Stack>

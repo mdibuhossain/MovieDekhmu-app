@@ -1,17 +1,17 @@
-import { Dimensions, Image, ScrollView, Text, View } from "react-native";
+import { Dimensions, Image, Text, View } from "react-native";
 import { Redirect, router } from "expo-router";
-import { images } from "../constants";
-import CustomButton from "../components/CustomButton";
+import { images } from "@/constants";
+import CustomButton from "@/components/CustomButton";
 import { StatusBar } from "expo-status-bar";
-import ScreenLayout from "../components/ScreenLayout";
+import ScreenLayout from "@/components/ScreenLayout";
 import { useSelector } from "react-redux";
 import LottieView from "lottie-react-native";
 import openLoader from "@/assets/opening-loader.json";
 
 const index = () => {
-  const authData = useSelector((state) => state.auth);
+  const { user, isLoading } = useSelector((state) => state.auth);
 
-  if (authData?.isLoading) {
+  if (isLoading) {
     return (
       <>
         <LottieView
@@ -26,7 +26,7 @@ const index = () => {
     );
   }
 
-  if (authData?.user?.email) return <Redirect href="/home" />;
+  if (user?.email) return <Redirect href="/home" />;
 
   return (
     <>

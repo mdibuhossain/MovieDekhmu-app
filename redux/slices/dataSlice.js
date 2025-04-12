@@ -12,11 +12,14 @@ const dataSlice = createSlice({
     setDataByIndex(state, action) {
       state[action.payload.index] = action.payload.value;
     },
+    clearMovies(state) {
+      state.movies = [];
+    },
     setLoading(state, action) {
       state.isLoading = action.payload;
     },
   },
 });
 
-export const { setDataByIndex, setLoading } = dataSlice.actions;
+export const { clearMovies, setDataByIndex, setLoading } = dataSlice.actions;
 export default dataSlice.reducer;
