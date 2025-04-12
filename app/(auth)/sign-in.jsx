@@ -7,6 +7,7 @@ import { images } from "../../constants";
 import { logIn } from "@/lib/supabaseService";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setUser } from "@/redux/slices/authSlice";
+import { router } from "expo-router";
 
 const initialUserInfo = {
   email: "",
