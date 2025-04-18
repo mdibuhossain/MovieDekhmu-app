@@ -1,24 +1,33 @@
 import { View, Text, Alert, ToastAndroid } from "react-native";
 import CustomButton from "../components/CustomButton";
-import { FontAwesome6 } from "@expo/vector-icons";
+import { FontAwesome6, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useSelector, useDispatch } from "react-redux";
+import { clearMovies, setLoading } from "@/redux/slices/dataSlice";
 import {
-  clearMovies,
-  setLoading,
-  setDataByIndex,
-} from "@/redux/slices/dataSlice";
-import {
+  getMoviesCount,
   deleteAllMovies,
   backupMoviesToCloud,
   restoreMoviesFromBackup,
 } from "@/lib/supabaseService";
+import { useEffect, useState } from "react";
 
 const settingsModal = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { movies, isLoading } = useSelector((state) => state.data);
+  const [moviesCount, setMoviesCount] = useState(0);
   const { user } = useSelector((state) => state.auth);
+  const { isLoading } = useSelector((state) => state.data);
+
+  useEffect(() => {
+    getMoviesCount(user?.email)
+      .then((count) => {
+        setMoviesCount(count);
+      })
+      .catch((error) => {
+        console.error("Error fetching movies count: ", error);
+      });
+  }, [isLoading]);
 
   const handleBack = () => {
     router.back();
@@ -88,33 +97,7 @@ const settingsModal = () => {
       dispatch(setLoading(false));
     }
   };
-
-  // const handleDeleteAccount = () => {
-  //   Alert.alert(
-  //     "Confirm",
-  //     "Are you sure you want to delete your account? This action cannot be undone.",
-  //     [
-  //       { text: "Cancel", style: "cancel" },
-  //       {
-  //         text: "Delete",
-  //         style: "destructive",
-  //         onPress: async () => {
-  //           dispatch(setLoading(true));
-  //           try {
-  //             await deleteAccount(user?.uid);
-  //             dispatch(setUser(null));
-  //           } catch (error) {
-  //             console.error("Error deleting account: ", error);
-  //             alert("Failed to delete account. Please try again.");
-  //           } finally {
-  //             dispatch(setLoading(false));
-  //           }
-  //         },
-  //       },
-  //     ]
-  //   );
-  // };
-
+  // bg-primary flex-1 items-center px-2
   return (
     <View className="bg-primary flex-1 items-center px-4 py-6">
       <View className="flex-row w-full items-center mb-4">
@@ -123,58 +106,51 @@ const settingsModal = () => {
           style={{ gap: 8 }}
         >
           <CustomButton
-            containerStyle="bg-gray-700 border p-2 !h-9 !w-9 justify-center items-center"
+            containerStyle="bg-gray-800 border border-gray-700 p-2 justify-center items-center"
             handlePress={handleBack}
-            icon={<FontAwesome6 name="arrow-left" size={14} color="white" />}
+            icon={<FontAwesome6 name="arrow-left" size={16} color="white" />}
           />
-          <Text className="text-white text-xl font-mPmedium">Settings</Text>
+          <Text className="text-white text-2xl font-bold tracking-wide">
+            Settings
+          </Text>
         </View>
       </View>
 
-      <View className="bg-black-100 w-full p-4 rounded-lg">
-        <Text className="text-white text-base font-mPsemibold mb-2">
+      <View className="bg-gray-800 w-full p-6 rounded-xl shadow-lg">
+        <Text className="text-white text-lg font-semibold mb-3">
           Total Movies
         </Text>
-        <Text className="text-gray-100 text-sm font-mPregular mb-4">
-          {movies.length} movies in the list
+        <Text className="text-gray-400 text-sm font-light mb-6">
+          {moviesCount} movies in the list
         </Text>
         <CustomButton
-          containerStyle="bg-red-600 p-3 rounded-md"
+          containerStyle="bg-red-500 p-4 rounded-lg shadow-md hover:bg-red-600"
           handlePress={handleClearMovies}
-          textStyle="text-white text-sm font-mPmedium"
+          textStyle="text-white text-base font-medium"
+          icon={<MaterialIcons name="delete" size={24} color="white" />}
           title={isLoading ? "Clearing..." : "Clear All Movies"}
         />
         <CustomButton
-          containerStyle="bg-blue-600 p-3 rounded-md"
+          containerStyle="bg-blue-500 p-4 rounded-lg shadow-md hover:bg-blue-600 mt-5"
           handlePress={handleBackupToCloud}
-          textStyle="text-white text-sm font-mPmedium"
+          textStyle="text-white text-base font-medium"
+          icon={<MaterialIcons name="backup" size={24} color="white" />}
           title={isLoading ? "Backing up..." : "Backup to Cloud"}
         />
         <CustomButton
-          containerStyle="bg-yellow-600 p-3 rounded-md"
+          containerStyle="bg-yellow-500 p-4 rounded-lg shadow-md hover:bg-yellow-600 mt-5"
           handlePress={handleRestoreFromBackup}
-          textStyle="text-white text-sm font-mPmedium"
+          textStyle="text-white text-base font-medium"
+          icon={<MaterialCommunityIcons name="backup-restore" size={24} color="white" />}
           title={isLoading ? "Restoring..." : "Restore from Cloud"}
         />
-        <CustomButton
-          containerStyle="bg-blue-600 p-3 rounded-md"
+        {/* <CustomButton
+          containerStyle="bg-blue-500 p-4 rounded-lg shadow-md hover:bg-blue-600 mt-5"
           handlePress={handleDownloadBackup}
-          textStyle="text-white text-sm font-mPmedium"
+          textStyle="text-white text-base font-medium"
           title={isLoading ? "Downloading..." : "Download Backup"}
-        />
+        /> */}
       </View>
-
-      {/* <View className="bg-black-100 w-full p-4 rounded-lg mt-4">
-        <Text className="text-white text-base font-mPsemibold mb-2">
-          Account Management
-        </Text>
-        <CustomButton
-          containerStyle="bg-red-700 p-3 rounded-md"
-          handlePress={handleDeleteAccount}
-          textStyle="text-white text-sm font-mPmedium"
-          title={isLoading ? "Deleting..." : "Delete Account"}
-        />
-      </View> */}
     </View>
   );
 };

@@ -5,8 +5,8 @@ import {
   TouchableHighlight,
   View,
 } from "react-native";
-import CustomInpurField from "../../components/CustomInpurField";
-import { memo, useEffect, useRef, useState } from "react";
+import CustomInputField from "../../components/CustomInpurField";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlashList } from "@shopify/flash-list";
 import { addMovie, deleteMovie, getMovies } from "@/lib/supabaseService";
 import { useDispatch, useSelector } from "react-redux";
@@ -51,15 +51,10 @@ const Home = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      if (
-        debounceFilter?.title === "" &&
-        debounceFilter?.review === "" &&
-        debounceFilter?.origin === "" &&
-        debounceFilter?.year === "" &&
-        debounceFilter?.filmType === "" &&
-        debounceFilter?.subType === "" &&
-        movies?.length !== 0
-      ) {
+      const isFilterEmpty = Object.values(debounceFilter || {}).every(
+        (val) => val === ""
+      );
+      if (isFilterEmpty && movies?.length !== 0) {
         dispatch(setLoading(false));
       }
     }
@@ -92,6 +87,8 @@ const Home = () => {
   };
 
   useEffect(() => {
+    setPage(1);
+    setHasMore(true);
     fetchData(debounceFilter);
   }, [debounceFilter]);
 
@@ -198,7 +195,7 @@ const Home = () => {
     >
       <View className="bg-primary flex-1">
         <View className=" px-3">
-          <CustomInpurField
+          <CustomInputField
             inputFieldStyle="!rounded-full border-2 focus:!border-secondary px-5"
             inputFieldContainerStyle="h-14"
             containerStyle="mt-2"
@@ -248,15 +245,14 @@ const Home = () => {
         </View>
 
         <FlashList
-          keyboardDismissMode="on-drag"
           data={movies}
+          keyboardDismissMode="on-drag"
           contentContainerStyle={{
             paddingRight: 10,
             paddingBottom: 10,
             paddingLeft: 10,
           }}
-          estimatedItemSize={100}
-          keyExtractor={(_, index) => index.toString()}
+          keyExtractor={(item, idx) => item?.id?.toString() + idx?.toString()}
           refreshControl={
             <RefreshControl
               refreshing={isLoading}
@@ -268,35 +264,23 @@ const Home = () => {
               colors={["#FF7F50"]}
             />
           }
-          ListHeaderComponent={spinner}
+          ListEmptyComponent={spinner}
           onEndReached={fetchMoreData}
           onEndReachedThreshold={0.5}
-          renderItem={({ item, index }) => {
-            return (
-              <TouchableHighlight
-                className="bg-gray-800 px-2 py-1 rounded-md my-0.5"
-                delayLongPress={300}
-                onLongPress={() => {
+          estimatedItemSize={50}
+          renderItem={useCallback(
+            ({ item, index }) => (
+              <MovieItem
+                item={item}
+                index={index}
+                onLongPress={(index) => {
                   setCurrentItemIndex(index);
                   bottomSheetModalRef.current.present();
                 }}
-              >
-                <View className="flex-col items-start gap-1">
-                  <View className="flex-row flex-1 items-start text-white text-sm font-[MavenPro-Regular]">
-                    <Text className="flex-1 color-white leading-5">
-                      {item?.title}
-                    </Text>
-                    <Text className="color-gray-400/80 text-xs">
-                      {item?.filmType} ({item?.subType})
-                    </Text>
-                  </View>
-                  <Text className="text-xs text-gray-400 font-[MavenPro-Regular]">
-                    {item?.review} - {item?.origin} - {item?.year}
-                  </Text>
-                </View>
-              </TouchableHighlight>
-            );
-          }}
+              />
+            ),
+            []
+          )}
         />
         <BottomSheetModal
           ref={bottomSheetModalRef}
@@ -348,5 +332,26 @@ const Home = () => {
     </TapGestureHandler>
   );
 };
+
+const MovieItem = memo(({ item, index, onLongPress }) => (
+  <TouchableHighlight
+    className="bg-gray-800 px-2 py-1 rounded-md my-0.5"
+    delayLongPress={300}
+    onLongPress={() => onLongPress(index)}
+    onPress={() => {}}
+  >
+    <View className="flex-col items-start gap-1">
+      <View className="flex-row flex-1 items-start text-white text-sm font-[MavenPro-Regular]">
+        <Text className="flex-1 color-white leading-5">{item?.title}</Text>
+        <Text className="color-gray-400/80 text-xs">
+          {item?.filmType} ({item?.subType})
+        </Text>
+      </View>
+      <Text className="text-xs text-gray-400 font-[MavenPro-Regular]">
+        {item?.review} - {item?.origin} - {item?.year}
+      </Text>
+    </View>
+  </TouchableHighlight>
+));
 
 export default memo(Home);

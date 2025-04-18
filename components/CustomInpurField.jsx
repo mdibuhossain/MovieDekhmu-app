@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setForm } from "@/redux/slices/formDataSlice";
 
-const CustomInpurField = (props) => {
+const CustomInputField = (props) => {
   const {
     name,
     type,
@@ -63,4 +63,4 @@ const CustomInpurField = (props) => {
   );
 };
 
-export default CustomInpurField;
+export default CustomInputField;
